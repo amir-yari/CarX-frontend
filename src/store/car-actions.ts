@@ -4,8 +4,7 @@ import { carActions } from "./car-slice";
 export const fetchCarData = () => {
   return async (dispatch: AppDispatch) => {
     const fetchData = async () => {
-      const response = await fetch("");
-
+      const response = await fetch("http://localhost:8000/api/v1/cars");
       if (!response.ok) {
         throw new Error("Could not fetch car data!");
       }
