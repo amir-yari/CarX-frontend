@@ -1,24 +1,16 @@
 import { AppDispatch } from "./store";
 import { carActions } from "./car-slice";
+import axios from "axios";
 
 export const fetchCarData = () => {
-  return async (dispatch: AppDispatch) => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:8000/api/v1/cars");
-      if (!response.ok) {
-        throw new Error("Could not fetch car data!");
-      }
-
-      const data = await response.json();
-
-      return data;
-    };
-
-    try {
-      const carData = await fetchData();
-      dispatch(carActions.setCars(carData));
-    } catch (error) {
-      console.error("Failed to fetch car data:", error);
-    }
+  return (dispatch: AppDispatch) => {
+    axios
+      .get("http://localhost:3000/api/v1/cars")
+      .then((res) => {
+        dispatch(carActions.setCars(res.data));
+      })
+      .catch((error) => {
+        console.error("Failed to fetch car data:", error);
+      });
   };
 };
