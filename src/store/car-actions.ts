@@ -2,10 +2,12 @@ import { AppDispatch } from "./store";
 import { carActions } from "./car-slice";
 import axios from "axios";
 
+const axiosInstance = axios.create({ baseURL: "http://localhost:3000" });
+
 export const fetchCarData = () => {
   return (dispatch: AppDispatch) => {
-    axios
-      .get("http://localhost:3000/api/v1/cars")
+    axiosInstance
+      .get("/api/v1/cars")
       .then((res) => {
         dispatch(carActions.setCars(res.data));
       })
