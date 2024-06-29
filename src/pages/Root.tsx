@@ -1,10 +1,26 @@
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
-import { Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme, Modal } from "antd";
+import Login from "../components/Login";
 
 const { Header, Content, Footer } = Layout;
 
 const Root = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleShowModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -28,6 +44,7 @@ const Root = () => {
           ]}
           className="flex-1 min-w-0"
         />
+        <Button onClick={handleShowModal}>Login</Button>
       </Header>
       <Content className="flex-1 p-12 w-full">
         <div
@@ -37,6 +54,14 @@ const Root = () => {
             borderRadius: borderRadiusLG,
           }}
         >
+          <Modal
+            title="Login"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <Login />
+          </Modal>
           <Outlet />
         </div>
       </Content>

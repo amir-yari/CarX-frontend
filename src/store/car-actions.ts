@@ -7,7 +7,13 @@ const axiosInstance = axios.create({ baseURL: "http://localhost:3000" });
 export const fetchCarData = () => {
   return (dispatch: AppDispatch) => {
     axiosInstance
-      .get("/api/v1/cars")
+      .get("/api/v1/cars", {
+        params: {
+          endDate: "12/11/2024",
+          startDate: "12/12/2024",
+          options: "aux,heater,air conditionning",
+        },
+      })
       .then((res) => {
         dispatch(carActions.setCars(res.data));
       })
