@@ -1,8 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import carSlice from "./car-slice";
+import filterSlice from "./filter-slice";
+import userSlice from "./user-slice";
 
 export const store = configureStore({
-  reducer: { car: carSlice.reducer },
+  reducer: {
+    car: carSlice.reducer,
+    filter: filterSlice.reducer,
+    user: userSlice.reducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
