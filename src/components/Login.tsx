@@ -1,5 +1,3 @@
-import { NavLink } from "react-router-dom";
-
 import {
   LockOutlined,
   UserOutlined,
@@ -10,16 +8,14 @@ import { Button, Checkbox, Form, Input, Divider, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
-const validateEmail = (value: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(value);
-};
+import { openModal } from "../store/modal-slice";
+import { useModalDispatch } from "../store/hooks";
 
-const validatePassword = (value: string) => {
-  return value.length >= 8;
-};
+import { validateEmail, validatePassword } from "../util/validation";
 
 const Login = () => {
+  const modalDispatch = useModalDispatch();
+
   const {
     value: emailValue,
     handleInputBlur: handleEmailBlur,
@@ -107,10 +103,13 @@ const Login = () => {
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
+        </Button>{" "}
+        Or
+        <Button type="link" onClick={() => modalDispatch(openModal("signup"))}>
+          Signup
         </Button>
-        Or <NavLink to="/signup">Signup!</NavLink>
       </Form.Item>
-      <Divider>or Login with</Divider>
+      <Divider>Or</Divider>
       <div className="flex justify-center space-x-4">
         <GoogleOutlined className="text-xl text-blue-500 hover:text-blue-700 cursor-pointer" />
         <AppleFilled className="text-xl text-black hover:text-gray-700 cursor-pointer" />

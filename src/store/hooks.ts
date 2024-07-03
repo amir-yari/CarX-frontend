@@ -16,3 +16,6 @@ export const useFilterSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useUserDispatch: DispatchFunction = useDispatch;
 export const useUserSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export const useModalDispatch: DispatchFunction = useDispatch;
+export const useModalSelector: TypedUseSelectorHook<RootState> = useSelector;

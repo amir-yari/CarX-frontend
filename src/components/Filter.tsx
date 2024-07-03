@@ -32,8 +32,6 @@ const Filter = () => {
     );
   };
 
-  console.log(filter);
-
   return (
     <Form
       name="filter"
