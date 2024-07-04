@@ -3,14 +3,13 @@ import { SearchOutlined } from "@ant-design/icons";
 
 import { useState } from "react";
 
-import { useFilterDispatch, useFilterSelector } from "../store/hooks";
+import { useFilterDispatch } from "../store/hooks";
 import { filterActions } from "../store/filter-slice";
 
 const { RangePicker } = DatePicker;
 
 const Filter = () => {
   const filterDispatch = useFilterDispatch();
-  const filter = useFilterSelector((state) => state.filter);
 
   const [priceRange, setPriceRange] = useState<number[]>([100, 500]);
 
@@ -34,18 +33,20 @@ const Filter = () => {
 
   return (
     <Form
+      id="filter-form"
       name="filter"
       initialValues={{ remember: true }}
       onFinish={handleFinish}
     >
-      <Form.Item name="location">
-        <Input placeholder="City Location" />
+      <Form.Item name="location" id="location">
+        <Input id="locationInput" placeholder="City Location" />
       </Form.Item>
-      <Form.Item name="dateRange">
-        <RangePicker />
+      <Form.Item name="dateRange" id="dateRange">
+        <RangePicker id="dateRangePicker" />
       </Form.Item>
-      <Form.Item name="priceRange">
+      <Form.Item name="priceRange" id="priceRange">
         <Select
+          id="priceRangeSelect"
           placeholder="Price"
           dropdownRender={() => (
             <div className="px-4 py-2">
@@ -58,6 +59,7 @@ const Filter = () => {
                   max={500}
                   className="flex-1"
                   range={{ draggableTrack: true }}
+                  id="priceRangeSlider"
                 />
                 <p className="ml-4">$Max</p>
               </div>
@@ -66,7 +68,7 @@ const Filter = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" id="submitButton">
           <SearchOutlined />
         </Button>
       </Form.Item>

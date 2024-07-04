@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
@@ -62,12 +62,15 @@ const Signup = () => {
 
   return (
     <Form
-      name="login"
-      className="login-form"
+      id="signup-form"
+      name="signup"
+      className="signup-form"
       initialValues={{ remember: true }}
       onFinish={handleFinish}
     >
       <Form.Item
+        name="fname"
+        id="fname-input"
         validateStatus={
           !isFnameTouched ? "" : isFnameValid ? "success" : "error"
         }
@@ -80,6 +83,7 @@ const Signup = () => {
         }
       >
         <Input
+          id="fname"
           placeholder="First Name"
           value={FnameValue}
           onChange={handleFnameChange}
@@ -87,6 +91,8 @@ const Signup = () => {
         />
       </Form.Item>
       <Form.Item
+        name="lname"
+        id="lname-input"
         validateStatus={
           !isLnameTouched ? "" : isLnameValid ? "success" : "error"
         }
@@ -99,6 +105,7 @@ const Signup = () => {
         }
       >
         <Input
+          id="lname"
           placeholder="Last Name"
           value={LnameValue}
           onChange={handleLnameChange}
@@ -106,6 +113,8 @@ const Signup = () => {
         />
       </Form.Item>
       <Form.Item
+        name="email"
+        id="email-input"
         validateStatus={
           !isEmailTouched ? "" : isEmailValid ? "success" : "error"
         }
@@ -118,6 +127,8 @@ const Signup = () => {
         }
       >
         <Input
+          autoComplete="off"
+          id="email"
           prefix={<UserOutlined className="site-form-item-icon" />}
           type="email"
           placeholder="Email"
@@ -127,6 +138,8 @@ const Signup = () => {
         />
       </Form.Item>
       <Form.Item
+        name="password"
+        id="password-input"
         validateStatus={
           !isPasswordTouched ? "" : isPasswordValid ? "success" : "error"
         }
@@ -139,6 +152,7 @@ const Signup = () => {
         }
       >
         <Input.Password
+          id="password"
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
@@ -147,22 +161,26 @@ const Signup = () => {
           onBlur={handlePasswordBlur}
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a className="login-form-forgot" href="">
+      <Form.Item id="forgot-password">
+        <a className="signup-form-forgot" href="">
           Forgot password
         </a>
       </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+      <Form.Item id="buttons">
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="signup-form-button"
+          id="signup-button"
+        >
           Signup
         </Button>{" "}
         Or
-        <Button type="link" onClick={() => modalDispatch(openModal("login"))}>
+        <Button
+          type="link"
+          onClick={() => modalDispatch(openModal("login"))}
+          id="login-button"
+        >
           Login
         </Button>
       </Form.Item>

@@ -8,7 +8,7 @@ import Signup from "../components/Signup";
 import { openModal, closeModal } from "../store/modal-slice";
 import { useModalDispatch, useModalSelector } from "../store/hooks";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Footer } = Layout;
 
 const Root = () => {
   const modalDispatch = useModalDispatch();
@@ -41,7 +41,6 @@ const Root = () => {
   return (
     <Layout className="min-h-screen flex flex-col w-full">
       <Header className="flex items-center w-full">
-        <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
@@ -59,27 +58,25 @@ const Root = () => {
         />
         <Button onClick={() => handleShowModal("login")}>Login</Button>
       </Header>
-      <Content className="flex-1 p-12 w-full">
-        <div
-          className="bg-white min-h-72 p-6 rounded-lg"
-          style={{
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Modal
-            title={modal.content === "signup" ? "Signup" : "Login"}
-            open={modal.isOpen}
-            onCancel={handleCancel}
-            footer={null}
-          >
-            {modalContent}
-          </Modal>
-          <Outlet />
-        </div>
-      </Content>
+      <Modal
+        title={modal.content === "signup" ? "Signup" : "Login"}
+        open={modal.isOpen}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {modalContent}
+      </Modal>
+      <div
+        className="h-screen"
+        style={{
+          background: colorBgContainer,
+          borderRadius: borderRadiusLG,
+        }}
+      >
+        <Outlet />
+      </div>
       <Footer className="text-center w-full">
-        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        CarX ©{new Date().getFullYear()} Created by Amir & Hassan
       </Footer>
     </Layout>
   );

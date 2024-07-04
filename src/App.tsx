@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import RootLayout from "./pages/Root";
 import HomePage from "./pages/Home";
 import CarsListPage from "./pages/CarsList";
-import SignupPage from "./components/Signup";
+import CarPage from "./pages/Car";
 import { store } from "./store/store";
 
 const router = createBrowserRouter([
@@ -13,8 +13,8 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "/cars", element: <CarsListPage /> },
-      { path: "/signup", element: <SignupPage /> },
+      { path: "cars", element: <CarsListPage /> },
+      { path: "cars/:carId", element: <CarPage /> },
     ],
   },
 ]);

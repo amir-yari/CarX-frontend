@@ -4,7 +4,7 @@ import {
   GoogleOutlined,
   AppleFilled,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Divider, message } from "antd";
+import { Button, Form, Input, Divider, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
@@ -43,12 +43,15 @@ const Login = () => {
 
   return (
     <Form
+      id="login-form"
       name="login"
       className="login-form"
       initialValues={{ remember: true }}
       onFinish={handleFinish}
     >
       <Form.Item
+        name="email"
+        id="email-input"
         validateStatus={
           !isEmailTouched ? "" : isEmailValid ? "success" : "error"
         }
@@ -61,6 +64,8 @@ const Login = () => {
         }
       >
         <Input
+          autoComplete="off"
+          id="email"
           prefix={<UserOutlined className="site-form-item-icon" />}
           type="email"
           placeholder="Email"
@@ -70,6 +75,8 @@ const Login = () => {
         />
       </Form.Item>
       <Form.Item
+        name="password"
+        id="password-input"
         validateStatus={
           !isPasswordTouched ? "" : isPasswordValid ? "success" : "error"
         }
@@ -82,6 +89,7 @@ const Login = () => {
         }
       >
         <Input.Password
+          id="password"
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
@@ -90,22 +98,26 @@ const Login = () => {
           onBlur={handlePasswordBlur}
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
+      <Form.Item id="forgot-password">
         <a className="login-form-forgot" href="">
           Forgot password
         </a>
       </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+      <Form.Item id="buttons">
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="login-form-button"
+          id="login-button"
+        >
           Log in
         </Button>{" "}
         Or
-        <Button type="link" onClick={() => modalDispatch(openModal("signup"))}>
+        <Button
+          type="link"
+          onClick={() => modalDispatch(openModal("signup"))}
+          id="signup-button"
+        >
           Signup
         </Button>
       </Form.Item>
