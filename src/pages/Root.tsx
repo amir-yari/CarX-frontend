@@ -1,13 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
-
 import { Button, Layout, Menu, theme, Modal, Image } from "antd";
+
+import { motion } from "framer-motion";
 
 import Login from "../components/Login";
 import Signup from "../components/Signup";
-
 import { openModal, closeModal } from "../store/modal-slice";
 import { useModalDispatch, useModalSelector } from "../store/hooks";
-
 import logoLinks from "../assets/logoLinks.json";
 
 const { Header, Footer } = Layout;
@@ -42,7 +41,7 @@ const Root = () => {
 
   return (
     <Layout className="min-h-screen flex flex-col w-full">
-      <Header className="flex items-center w-full">
+      <Header className="flex items-center">
         <div className="demo-logo pr-6" style={{ paddingTop: "1.05rem" }}>
           <NavLink to={"/"}>
             <Image
@@ -58,25 +57,48 @@ const Root = () => {
           items={[
             {
               key: "1",
-              label: <NavLink to="/">Home</NavLink>,
+              label: (
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 500 }}
+                >
+                  <NavLink to="/">Home</NavLink>
+                </motion.div>
+              ),
             },
             {
               key: "2",
-              label: <NavLink to="/cars">Cars List</NavLink>,
+              label: (
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 500 }}
+                >
+                  <NavLink to="/cars">Cars List</NavLink>
+                </motion.div>
+              ),
             },
           ]}
           className="flex-1 min-w-0"
         />
-        <Button onClick={() => handleShowModal("login")}>Login</Button>
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 500 }}
+        >
+          <Button onClick={() => handleShowModal("login")}>Login</Button>
+        </motion.div>
       </Header>
-      <Modal
-        title={modal.content === "signup" ? "Signup" : "Login"}
-        open={modal.isOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        {modalContent}
-      </Modal>
+
+      {modal.isOpen && (
+        <Modal
+          title={modal.content === "signup" ? "Signup" : "Login"}
+          open={true}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          {modalContent}
+        </Modal>
+      )}
+
       <div
         style={{
           background: colorBgContainer,

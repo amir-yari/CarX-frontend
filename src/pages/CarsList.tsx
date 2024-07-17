@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+import { motion } from "framer-motion";
+
 import { useCarDispatch, useCarSelector } from "../store/hooks.ts";
 import { fetchCarData } from "../store/car-actions.ts";
 
@@ -36,7 +38,10 @@ const CarsList = () => {
           ) : (
             cars.map((car) => (
               <NavLink to={`/cars/${car.carId}`} key={car.carId}>
-                <div className="m-4">
+                <motion.div
+                  className="m-4"
+                  transition={{ staggerChildren: 0.05 }}
+                >
                   <Card
                     style={{ height: "100%" }}
                     cover={
@@ -49,7 +54,7 @@ const CarsList = () => {
                   >
                     <Meta title={car.make} description={car.model} />
                   </Card>
-                </div>
+                </motion.div>
               </NavLink>
             ))
           )}
