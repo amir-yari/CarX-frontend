@@ -3,6 +3,7 @@ import carSlice from "./car-slice";
 import filterSlice from "./filter-slice";
 import userSlice from "./user-slice";
 import modalSlice from "./modal-slice";
+import authSlice from "./auth-slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     filter: filterSlice.reducer,
     user: userSlice.reducer,
     modal: modalSlice.reducer,
+    auth: authSlice.reducer,
   },
 });
 

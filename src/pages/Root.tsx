@@ -1,12 +1,14 @@
 import { NavLink, Outlet } from "react-router-dom";
 
-import { Button, Layout, Menu, theme, Modal } from "antd";
+import { Button, Layout, Menu, theme, Modal, Image } from "antd";
 
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 
 import { openModal, closeModal } from "../store/modal-slice";
 import { useModalDispatch, useModalSelector } from "../store/hooks";
+
+import logoLinks from "../assets/logoLinks.json";
 
 const { Header, Footer } = Layout;
 
@@ -41,6 +43,15 @@ const Root = () => {
   return (
     <Layout className="min-h-screen flex flex-col w-full">
       <Header className="flex items-center w-full">
+        <div className="demo-logo pr-6" style={{ paddingTop: "1.05rem" }}>
+          <NavLink to={"/"}>
+            <Image
+              src={logoLinks["logo-white-no-background-png"]}
+              style={{ maxHeight: "30px" }}
+              preview={false}
+            />
+          </NavLink>
+        </div>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -67,7 +78,6 @@ const Root = () => {
         {modalContent}
       </Modal>
       <div
-        className="h-screen"
         style={{
           background: colorBgContainer,
           borderRadius: borderRadiusLG,

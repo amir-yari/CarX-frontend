@@ -1,27 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type Car = {
-  id: number;
-  make: string;
-  model: string;
-  carYear: number;
-  vehicleType: string;
-  transmission: string;
-  millageIncludedKM: number;
-  price: number;
-  fuelType: string;
-  "image-path": string[];
-  location: {
-    lat: string;
-    lng: string;
-    city: string;
-    country: string;
-  };
-  trips: {
-    avgRate: number;
-    tripCount: number;
-  };
-};
+import Car from "../types/car";
 
 type CarState = {
   items: Car[];

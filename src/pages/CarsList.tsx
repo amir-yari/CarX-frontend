@@ -9,19 +9,18 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 import Filter from "../components/Filter.tsx";
 
+const { Meta } = Card;
+
 const CarsList = () => {
-  const [isFetched, setIsFetched] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const carDispatch = useCarDispatch();
   const cars = useCarSelector((state) => state.car.items);
 
   useEffect(() => {
-    if (!isFetched) {
-      carDispatch(fetchCarData());
-      setIsFetched(true);
+    if (isLoading) {
+      carDispatch(fetchCarData(setIsLoading));
     }
-  }, [carDispatch]);
-
-  const { Meta } = Card;
+  }, [carDispatch, isLoading]);
 
   return (
     <div className="grid grid-cols-2">
@@ -30,20 +29,20 @@ const CarsList = () => {
           <Filter />
         </div>
         <div className="overflow-y-auto absolute h-2/3 w-full">
-          {!isFetched ? (
-            <Space>
+          {isLoading ? (
+            <Space className="flex justify-center">
               <Spin indicator={<LoadingOutlined spin />} size="large" />
             </Space>
           ) : (
             cars.map((car) => (
-              <NavLink to={`/cars/${car.id}`} key={car.id}>
+              <NavLink to={`/cars/${car.carId}`} key={car.carId}>
                 <div className="m-4">
                   <Card
                     style={{ height: "100%" }}
                     cover={
                       <img
                         alt="example"
-                        src={car["image-path"][0]}
+                        src={car.headerImage}
                         className="w-full object-cover"
                       />
                     }
