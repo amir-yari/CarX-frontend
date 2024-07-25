@@ -42,11 +42,11 @@ const Root = () => {
   return (
     <Layout className="min-h-screen flex flex-col w-full">
       <Header className="flex items-center">
-        <div className="demo-logo pr-6" style={{ paddingTop: "1.05rem" }}>
+        <div className="max-w-16 pr-4">
           <NavLink to={"/"}>
             <Image
               src={logoLinks["logo-white-no-background-png"]}
-              style={{ maxHeight: "30px" }}
+              style={{ maxHeight: "25px" }}
               preview={false}
             />
           </NavLink>
