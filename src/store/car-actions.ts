@@ -22,3 +22,20 @@ export const fetchCarData = (
       });
   };
 };
+
+export const fetchCarDataById = (
+  carId: string,
+  setIsLoading: (value: React.SetStateAction<boolean>) => void
+) => {
+  return (dispatch: AppDispatch) => {
+    api
+      .get(`/api/v1/cars/${carId}`)
+      .then((res) => {
+        dispatch(carActions.setCar(res.data));
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch car data:", error);
+      });
+  };
+};

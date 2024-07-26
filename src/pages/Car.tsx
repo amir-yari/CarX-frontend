@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import {
   Image,
   Typography,
@@ -10,9 +12,17 @@ import {
   Carousel,
   Col,
   Row,
+  Space,
+  Spin,
 } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { useCarSelector, useFilterSelector } from "../store/hooks.ts";
+import { UserOutlined, LoadingOutlined } from "@ant-design/icons";
+
+import {
+  useCarSelector,
+  useFilterSelector,
+  useCarDispatch,
+} from "../store/hooks.ts";
+import { fetchCarDataById } from "../store/car-actions.ts";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -25,10 +35,27 @@ const contentStyle: React.CSSProperties = {
 };
 
 const Car = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const filter = useFilterSelector((state) => state.filter);
   const { carId } = useParams();
+  const carDispatch = useCarDispatch();
+
+  useEffect(() => {
+    if (isLoading) {
+      carDispatch(fetchCarDataById(carId!, setIsLoading));
+    }
+  }, [carDispatch, carId, isLoading]);
+
   const cars = useCarSelector((state) => state.car.items);
   const selectedCar = cars.find((car) => car.carId === carId);
+
+  if (isLoading) {
+    return (
+      <Space className="flex justify-center p-96">
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
+      </Space>
+    );
+  }
 
   if (!selectedCar) {
     return <p>Car not found</p>;
