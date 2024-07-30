@@ -71,7 +71,7 @@ const Car = () => {
       <Image.PreviewGroup items={carImages}>
         <Image
           src={selectedCar.headerImage}
-          alt={`Image of ${selectedCar.make} ${selectedCar.model}`}
+          alt={`Image of ${selectedCar.price} ${selectedCar.model}`}
           style={{
             objectFit: "cover",
             maxHeight: "24rem",
@@ -89,7 +89,8 @@ const Car = () => {
             items={[
               {
                 label: <UserOutlined />,
-                children: "Hassan Kose",
+                // @ts-ignore
+                children: `${selectedCar.host.firstName}`,
               },
             ]}
           />
