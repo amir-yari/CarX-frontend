@@ -14,6 +14,7 @@ import {
   Row,
   Space,
   Spin,
+  Avatar,
 } from "antd";
 import { UserOutlined, LoadingOutlined } from "@ant-design/icons";
 
@@ -67,7 +68,7 @@ const Car = () => {
   ];
 
   return (
-    <div className="px-36 py-4">
+    <div className="px-20 py-4">
       <Image.PreviewGroup items={carImages}>
         <Image
           src={selectedCar.headerImage}
@@ -88,9 +89,8 @@ const Car = () => {
             title="Hosted By"
             items={[
               {
-                label: <UserOutlined />,
-                // @ts-ignore
-                children: `${selectedCar.host.firstName}`,
+                label: <Avatar icon={<UserOutlined />} />,
+                children: "Hassan Kose",
               },
             ]}
           />
@@ -104,14 +104,14 @@ const Car = () => {
             ]}
           />
         </Col>
-        <Col span={8} className="flex flex-col items-center">
-          <Row>
+        <Col span={8}>
+          <Row justify="center">
             <Title level={2} className="text-center">
               {`$${selectedCar.price} total`}
             </Title>
           </Row>
           <Divider />
-          <Row>
+          <Row justify="center">
             <Form
               id="filter-form"
               name="filter"
@@ -136,8 +136,8 @@ const Car = () => {
             </Form>
           </Row>
           <Divider />
-          <Row>
-            <div className="w-60 h-60 bg-white">
+          <Row justify="center">
+            <div className="w-40 h-60 bg-white">
               <Carousel fade arrows={true} infinite={false}>
                 <div>
                   <Title

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import { motion } from "framer-motion";
-
 import { useCarDispatch, useCarSelector } from "../store/hooks.ts";
 import { fetchCarData } from "../store/car-actions.ts";
 
-import { Card, Space, Spin } from "antd";
+import { Card, Space, Spin, Row, Col, List } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 import Filter from "../components/Filter.tsx";
@@ -25,42 +23,45 @@ const CarsList = () => {
   }, [carDispatch, isLoading]);
 
   return (
-    <div className="grid grid-cols-2">
-      <div className="w-full col-span-1 relative h-screen">
-        <div className="p-4">
-          <Filter />
-        </div>
-        <div className="overflow-y-auto absolute h-2/3 w-full">
+    <>
+      <Row>
+        <Filter />
+      </Row>
+      <Row className="h-screen">
+        <Col span={14} className="overflow-scroll h-screen p-2">
           {isLoading ? (
-            <Space className="flex justify-center">
+            <Space className="flex justify-center pt-12">
               <Spin indicator={<LoadingOutlined spin />} size="large" />
             </Space>
           ) : (
-            cars.map((car) => (
-              <NavLink to={`/cars/${car.carId}`} key={car.carId}>
-                <motion.div
-                  className="m-4"
-                  transition={{ staggerChildren: 0.05 }}
-                >
-                  <Card
-                    style={{ height: "100%" }}
-                    cover={
-                      <img
-                        alt="example"
-                        src={car.headerImage}
-                        className="w-full object-cover"
-                      />
-                    }
-                  >
-                    <Meta title={car.make} description={car.model} />
-                  </Card>
-                </motion.div>
-              </NavLink>
-            ))
+            <List
+              itemLayout="vertical"
+              size="small"
+              dataSource={cars}
+              renderItem={(car) => (
+                <NavLink to={`/cars/${car.carId}`}>
+                  <List.Item key={car.carId}>
+                    <Card
+                      style={{ height: "100%" }}
+                      cover={
+                        <img
+                          alt="example"
+                          src={car.headerImage}
+                          className="w-full object-cover"
+                        />
+                      }
+                    >
+                      <Meta title={car.make} description={car.model} />
+                    </Card>
+                  </List.Item>
+                </NavLink>
+              )}
+            />
           )}
-        </div>
-      </div>
-    </div>
+        </Col>
+        <Col span={10}></Col>
+      </Row>
+    </>
   );
 };
 

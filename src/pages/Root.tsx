@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Button, Layout, Menu, theme, Modal, Image } from "antd";
+import { Button, Layout, Menu, Modal, Image } from "antd";
 
 import { motion } from "framer-motion";
 
@@ -9,15 +9,11 @@ import { openModal, closeModal } from "../store/modal-slice";
 import { useModalDispatch, useModalSelector } from "../store/hooks";
 import logoLinks from "../assets/logoLinks.json";
 
-const { Header, Footer } = Layout;
+const { Content, Header, Footer } = Layout;
 
 const Root = () => {
   const modalDispatch = useModalDispatch();
   const modal = useModalSelector((state) => state.modal);
-
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
   const handleShowModal = (content: string) => {
     modalDispatch(openModal(content));
@@ -41,19 +37,19 @@ const Root = () => {
 
   return (
     <Layout className="min-h-screen flex flex-col w-full">
-      <Header className="flex items-center">
-        <div className="max-w-16 pr-4">
+      <Header className="flex items-center bg-white border-b-4 border-blue-800">
+        <div className="max-w-16 pr-4 border-none">
           <NavLink to={"/"}>
             <Image
-              src={logoLinks["logo-white-no-background-png"]}
+              src={logoLinks["logo-black-no-background-png"]}
               style={{ maxHeight: "25px" }}
               preview={false}
             />
           </NavLink>
         </div>
         <Menu
-          theme="dark"
           mode="horizontal"
+          selectable={false}
           items={[
             {
               key: "1",
@@ -78,12 +74,13 @@ const Root = () => {
               ),
             },
           ]}
-          className="flex-1 min-w-0"
+          className="flex-1 min-w-0 border-b-2 border-blue-800"
         />
         <motion.div
           whileHover={{ scale: 1.1 }}
           transition={{ type: "spring", stiffness: 500 }}
         >
+          <div className="border-none"></div>
           <Button onClick={() => handleShowModal("login")}>Login</Button>
         </motion.div>
       </Header>
@@ -99,14 +96,10 @@ const Root = () => {
         </Modal>
       )}
 
-      <div
-        style={{
-          background: colorBgContainer,
-          borderRadius: borderRadiusLG,
-        }}
-      >
+      <Content className="bg-white">
         <Outlet />
-      </div>
+      </Content>
+
       <Footer className="text-center w-full">
         CarX ©{new Date().getFullYear()} Created by Amir & Hassan
       </Footer>
