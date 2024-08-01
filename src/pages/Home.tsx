@@ -57,12 +57,17 @@ export default function Home() {
         }}
       >
         <h1 className="text-9xl text-white tracking-normal">Find your drive</h1>
-        <Link
-          to="/cars"
-          className="inline-block px-4 py-2 bg-white text-black border border-black rounded-md mt-4"
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          transition={{ type: "spring", stiffness: 500 }}
         >
-          Explore Cars
-        </Link>
+          <Link
+            to="/cars"
+            className="inline-block px-4 py-2 bg-white text-black border border-black rounded-md mt-4"
+          >
+            Explore Cars
+          </Link>
+        </motion.div>
       </motion.div>
 
       <motion.div>

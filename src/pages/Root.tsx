@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Button, Layout, Menu, Modal, Image } from "antd";
+import { Button, Layout, Modal, Image } from "antd";
 
 import { motion } from "framer-motion";
 
@@ -37,8 +37,8 @@ const Root = () => {
 
   return (
     <Layout className="min-h-screen flex flex-col w-full">
-      <Header className="flex items-center bg-white border-b-4 border-blue-800">
-        <div className="max-w-16 pr-4 border-none">
+      <Header className="flex items-center bg-white border-b-2 border-blue-800">
+        <div className="max-w-16 absolute left-5 top-1">
           <NavLink to={"/"}>
             <Image
               src={logoLinks["logo-black-no-background-png"]}
@@ -47,7 +47,7 @@ const Root = () => {
             />
           </NavLink>
         </div>
-        <Menu
+        {/* <Menu
           mode="horizontal"
           selectable={false}
           items={[
@@ -75,12 +75,12 @@ const Root = () => {
             },
           ]}
           className="flex-1 min-w-0 border-b-2 border-blue-800"
-        />
+        /> */}
         <motion.div
           whileHover={{ scale: 1.1 }}
           transition={{ type: "spring", stiffness: 500 }}
+          className="absolute right-5"
         >
-          <div className="border-none"></div>
           <Button onClick={() => handleShowModal("login")}>Login</Button>
         </motion.div>
       </Header>
