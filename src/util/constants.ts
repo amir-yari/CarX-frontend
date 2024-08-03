@@ -1,0 +1,18 @@
+export const carmakes = [
+  { value: "toyota", title: "Toyota" },
+  { value: "ford", title: "Ford" },
+  { value: "honda", title: "Honda" },
+  { value: "chevrolet", title: "Chevrolet" },
+  { value: "nissan", title: "Nissan" },
+  { value: "bmw", title: "BMW" },
+  { value: "audi", title: "Audi" },
+  { value: "mercedes", title: "Mercedes-Benz" },
+  { value: "volkswagen", title: "Volkswagen" },
+  { value: "subaru", title: "Subaru" },
+  { value: "kia", title: "Kia" },
+  { value: "hyundai", title: "Hyundai" },
+  { value: "mazda", title: "Mazda" },
+  { value: "lexus", title: "Lexus" },
+  { value: "jaguar", title: "Jaguar" },
+  { value: "land-rover", title: "Land Rover" },
+];

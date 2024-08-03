@@ -86,6 +86,8 @@ const Car = () => {
         <Col span={16}>
           <Title>{`${selectedCar.make} ${selectedCar.model}`}</Title>
           <Descriptions
+            contentStyle={{ paddingTop: "0.25rem" }}
+            colon={false}
             title="Hosted By"
             items={[
               {
