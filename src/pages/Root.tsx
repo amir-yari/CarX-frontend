@@ -85,7 +85,7 @@ const Root = () => {
         </motion.div>
       </Header>
 
-      {modal.isOpen && (
+      {modalContent && modal.isOpen && (
         <Modal
           title={modal.content === "signup" ? "Signup" : "Login"}
           open={true}

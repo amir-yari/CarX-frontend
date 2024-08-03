@@ -6,6 +6,9 @@ type Filter = {
   endDate: string;
   minPrice: number | null;
   maxPrice: number | null;
+  type: string;
+  make: string[];
+  fuelType: string;
 };
 
 const initialState: Filter = {
@@ -14,6 +17,9 @@ const initialState: Filter = {
   endDate: "",
   minPrice: null,
   maxPrice: null,
+  type: "",
+  make: [],
+  fuelType: "",
 };
 
 export const filterSlice = createSlice({
