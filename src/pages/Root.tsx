@@ -1,12 +1,29 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Button, Layout, Modal, Image } from "antd";
+
+import {
+  Button,
+  Layout,
+  Modal,
+  Image,
+  Dropdown,
+  type MenuProps,
+  Avatar,
+} from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 import { motion } from "framer-motion";
 
 import Login from "../components/Login";
 import Signup from "../components/Signup";
 import { openModal, closeModal } from "../store/modal-slice";
-import { useModalDispatch, useModalSelector } from "../store/hooks";
+import {
+  useModalDispatch,
+  useModalSelector,
+  useUserDispatch,
+  useUserSelector,
+} from "../store/hooks";
+import { logout } from "../store/user-actions";
+
 import logoLinks from "../assets/logoLinks.json";
 
 const { Content, Header, Footer } = Layout;
@@ -14,6 +31,8 @@ const { Content, Header, Footer } = Layout;
 const Root = () => {
   const modalDispatch = useModalDispatch();
   const modal = useModalSelector((state) => state.modal);
+  const user = useUserSelector((state) => state.user);
+  const userDispatch = useUserDispatch();
 
   const handleShowModal = (content: string) => {
     modalDispatch(openModal(content));
@@ -22,6 +41,37 @@ const Root = () => {
   const handleCancel = () => {
     modalDispatch(closeModal());
   };
+
+  const handleLogout = () => {
+    userDispatch(logout());
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: `Hi, ${user.firstName}`,
+    },
+    {
+      key: "2",
+      label: (
+        <Button type="text" onClick={handleLogout}>
+          Logout
+        </Button>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <NavLink to={"/account"}>
+          <Avatar
+            style={{ backgroundColor: "black" }}
+            icon={<UserOutlined />}
+          />
+          Account
+        </NavLink>
+      ),
+    },
+  ];
 
   let modalContent;
   switch (modal.content) {
@@ -81,7 +131,16 @@ const Root = () => {
           transition={{ type: "spring", stiffness: 500 }}
           className="absolute right-5"
         >
-          <Button onClick={() => handleShowModal("login")}>Login</Button>
+          {user.isLoggedIn ? (
+            <Dropdown menu={{ items }} placement="bottomRight">
+              <Avatar
+                style={{ backgroundColor: "black" }}
+                icon={<UserOutlined />}
+              />
+            </Dropdown>
+          ) : (
+            <Button onClick={() => handleShowModal("login")}>Login</Button>
+          )}
         </motion.div>
       </Header>
 

@@ -22,8 +22,11 @@ import {
   useCarSelector,
   useFilterSelector,
   useCarDispatch,
+  useUserSelector,
+  useModalDispatch,
 } from "../store/hooks.ts";
 import { fetchCarDataById } from "../store/car-actions.ts";
+import { openModal } from "../store/modal-slice.ts";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -50,6 +53,13 @@ const Car = () => {
   const cars = useCarSelector((state) => state.car.items);
   const selectedCar = cars.find((car) => car.carId === carId);
 
+  const userIsLoggedIn = useUserSelector((state) => state.user.isLoggedIn);
+  const modalDispatch = useModalDispatch();
+
+  const handleCheckout = () => {
+    !userIsLoggedIn && modalDispatch(openModal("login"));
+  };
+
   if (isLoading) {
     return (
       <Space className="flex justify-center p-96">
@@ -68,7 +78,7 @@ const Car = () => {
   ];
 
   return (
-    <div className="px-20 py-4">
+    <div className="px-4 md:px-20 py-4">
       <Image.PreviewGroup items={carImages}>
         <Image
           src={selectedCar.headerImage}
@@ -82,9 +92,9 @@ const Car = () => {
         />
       </Image.PreviewGroup>
 
-      <Row>
-        <Col span={16}>
-          <Title>{`${selectedCar.make} ${selectedCar.model}`}</Title>
+      <Row className="flex flex-col md:flex-row">
+        <Col span={24} md={16}>
+          <Title className="text-center md:text-left">{`${selectedCar.make} ${selectedCar.model}`}</Title>
           <Descriptions
             contentStyle={{ paddingTop: "0.25rem" }}
             colon={false}
@@ -106,7 +116,7 @@ const Car = () => {
             ]}
           />
         </Col>
-        <Col span={8}>
+        <Col span={24} md={8}>
           <Row justify="center">
             <Title level={2} className="text-center">
               {`$${selectedCar.price} total`}
@@ -123,6 +133,7 @@ const Car = () => {
                 <RangePicker
                   id="dateRangePicker"
                   placeholder={[filter.startDate, filter.endDate]}
+                  className="w-full"
                 />
               </Form.Item>
               <Form.Item>
@@ -131,6 +142,7 @@ const Car = () => {
                   type="primary"
                   htmlType="submit"
                   id="submitButton"
+                  onClick={handleCheckout}
                 >
                   Checkout
                 </Button>
@@ -139,19 +151,23 @@ const Car = () => {
           </Row>
           <Divider />
           <Row justify="center">
-            <div className="w-40 h-60 bg-white">
+            <div className="w-full md:w-40 h-60 bg-white">
               <Carousel fade arrows={true} infinite={false}>
                 <div>
                   <Title
                     level={2}
                     style={contentStyle}
-                    className="bg-purple-900"
+                    className="bg-purple-900 text-center"
                   >
                     1
                   </Title>
                 </div>
                 <div>
-                  <Title level={2} style={contentStyle} className="bg-red-700">
+                  <Title
+                    level={2}
+                    style={contentStyle}
+                    className="bg-red-700 text-center"
+                  >
                     2
                   </Title>
                 </div>

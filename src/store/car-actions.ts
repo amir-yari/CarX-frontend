@@ -4,7 +4,7 @@ import { carActions } from "./car-slice";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://carxapi-h5d5fhhbc4hpc5fc.eastus-01.azurewebsites.net",
+  baseURL: "",
 });
 
 export const fetchCarData = (
@@ -12,7 +12,7 @@ export const fetchCarData = (
 ) => {
   return (dispatch: AppDispatch) => {
     api
-      .get("/api/v1/cars", {})
+      .get("/api/v1/cars")
       .then((res) => {
         dispatch(carActions.setCars(res.data));
         setIsLoading(false);

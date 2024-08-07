@@ -89,7 +89,11 @@ const Filter = () => {
             <RangePicker
               id="dateRangePicker"
               style={{ width: "100%" }}
-              placeholder={[filter.startDate, filter.endDate]}
+              placeholder={
+                filter.startDate
+                  ? [filter.startDate, filter.endDate]
+                  : ["Start Date", "End Date"]
+              }
             />
           </Form.Item>
           <div className="p-4">

@@ -1,20 +1,17 @@
-import {
-  LockOutlined,
-  UserOutlined,
-  GoogleOutlined,
-  AppleFilled,
-} from "@ant-design/icons";
+import { LockOutlined, UserOutlined, GoogleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Divider, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
-import { openModal } from "../store/modal-slice";
-import { useModalDispatch } from "../store/hooks";
+import { closeModal, openModal } from "../store/modal-slice";
+import { useModalDispatch, useUserDispatch } from "../store/hooks";
 
 import { validateEmail, validatePassword } from "../util/validation";
+import { fetchUserData, googleLogin, login } from "../store/user-actions";
 
 const Login = () => {
   const modalDispatch = useModalDispatch();
+  const userDispatch = useUserDispatch();
 
   const {
     value: emailValue,
@@ -32,13 +29,19 @@ const Login = () => {
     isTouched: isPasswordTouched,
   } = useInput("", validatePassword);
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (isEmailValid && isPasswordValid) {
-      message.success("Login Successful!");
+      await userDispatch(login(emailValue, passwordValue));
+      userDispatch(fetchUserData());
+      modalDispatch(closeModal());
       console.log(emailValue, passwordValue);
     } else {
       message.error("Please fix the errors in the form.");
     }
+  };
+
+  const handleGoogle = () => {
+    userDispatch(googleLogin());
   };
 
   return (
@@ -123,8 +126,9 @@ const Login = () => {
       </Form.Item>
       <Divider>Or</Divider>
       <div className="flex justify-center space-x-4">
-        <GoogleOutlined className="text-xl text-blue-500 hover:text-blue-700 cursor-pointer" />
-        <AppleFilled className="text-xl text-black hover:text-gray-700 cursor-pointer" />
+        <Button onClick={handleGoogle}>
+          <GoogleOutlined className="text-xl text-blue-500 hover:text-blue-700 cursor-pointer" />
+        </Button>
       </div>
     </Form>
   );
