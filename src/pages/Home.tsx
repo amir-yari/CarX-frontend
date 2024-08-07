@@ -1,13 +1,21 @@
 import { Link } from "react-router-dom";
 
-import { Image } from "antd";
+import { Image, Form, Input, DatePicker } from "antd";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 
 import logoLinks from "../assets/logoLinks.json";
 import image from "../assets/image.jpg";
 
+import { useFilterDispatch, useFilterSelector } from "../store/hooks";
+import { filterActions } from "../store/filter-slice";
+
+const { RangePicker } = DatePicker;
+
 export default function Home() {
+  const filter = useFilterSelector((state) => state.filter);
+  const filterDispatch = useFilterDispatch();
+
   const { scrollY } = useScroll();
 
   const yCity = useTransform(scrollY, [0, 200], [0, -100]);
@@ -19,6 +27,21 @@ export default function Home() {
 
   const yText = useTransform(scrollY, [0, 200, 300, 500], [0, 50, 50, 300]);
   const scaleText = useTransform(scrollY, [0, 300], [1, 1.5]);
+
+  const handleFinish = (allValues: any) => {
+    const { location, dateRange, priceRange } = allValues;
+
+    filterDispatch(
+      filterActions.setFilters({
+        ...filter,
+        location: location || "",
+        startDate: dateRange ? dateRange[0]?.format("YYYY-MM-DD") : "",
+        endDate: dateRange ? dateRange[1]?.format("YYYY-MM-DD") : "",
+        minPrice: priceRange ? priceRange[0] : 0,
+        maxPrice: priceRange ? priceRange[1] : 200,
+      })
+    );
+  };
 
   return (
     <div
@@ -52,11 +75,44 @@ export default function Home() {
           position: "absolute",
           left: "20%",
           right: "20%",
-          top: "15%",
+          top: "5%",
           textAlign: "center",
         }}
       >
         <h1 className="text-9xl text-white tracking-normal">Find your drive</h1>
+        <Form
+          id="filter-form"
+          name="filter"
+          initialValues={{ remember: true }}
+          onFinish={handleFinish}
+        >
+          <Form.Item
+            name="location"
+            id="location"
+            className="p-4"
+            initialValue={filter.location}
+          >
+            <Input
+              id="locationInput"
+              placeholder={filter.location ? filter.location : "City Location"}
+            />
+          </Form.Item>
+
+          <Form.Item name="dateRange" id="dateRange" className="p-4">
+            <RangePicker
+              showTime
+              showHour
+              showMinute
+              id="dateRangePicker"
+              style={{ width: "100%" }}
+              placeholder={
+                filter.startDate
+                  ? [filter.startDate, filter.endDate]
+                  : ["Start Date", "End Date"]
+              }
+            />
+          </Form.Item>
+        </Form>
         <motion.div
           whileHover={{ scale: 1.1 }}
           transition={{ type: "spring", stiffness: 500 }}
