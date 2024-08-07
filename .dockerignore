@@ -19,7 +19,3 @@ dev.Dockerfile
 # OS-specific files
 **/.DS_Store
 **/Thumbs.db
-
-# Environment files
-**/*.env
-**/*.env.placeholder
