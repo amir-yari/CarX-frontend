@@ -13,7 +13,7 @@ export const fetchCarData = (
 ) => {
   return (dispatch: AppDispatch) => {
     api
-      .get("/api/v1/cars", {})
+      .get("/api/v1/cars")
       .then((res) => {
         dispatch(carActions.setCars(res.data));
         setIsLoading(false);

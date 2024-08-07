@@ -14,6 +14,7 @@ type User = {
   DLRegion?: string;
   dob?: Date;
   profileImage?: string;
+  isLoggedIn: boolean;
 };
 
 export default User;

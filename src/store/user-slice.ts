@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import User from "../types/user";
 
 const initialState: User = {
+  isLoggedIn: false,
   firstName: "",
   lastName: "",
   email: "",
@@ -12,21 +13,15 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // setUser(state, action: PayloadAction<User>) {
-    //   state.name = action.payload.name;
-    //   state.email = action.payload.email;
-    //   state.isLoggedIn = action.payload.isLoggedIn;
-    // },
-    // loginUser(state, action: PayloadAction<User>) {
-    //   state.name = action.payload.name;
-    //   state.email = action.payload.email;
-    //   state.isLoggedIn = true;
-    // },
-    // logoutUser(state) {
-    //   state.name = "";
-    //   state.email = "";
-    //   state.isLoggedIn = false;
-    // },
+    setUser(state, action: PayloadAction<User>) {
+      state.firstName = action.payload.firstName;
+      state.lastName = action.payload.lastName;
+      state.email = action.payload.email;
+      state.isLoggedIn = true;
+    },
+    logoutUser() {
+      return initialState;
+    },
   },
 });
 

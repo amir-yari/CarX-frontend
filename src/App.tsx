@@ -5,6 +5,8 @@ import RootLayout from "./pages/Root";
 import HomePage from "./pages/Home";
 import CarsListPage from "./pages/CarsList";
 import CarPage from "./pages/Car";
+import AccountPage from "./pages/Account";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import { authInterceptor } from "./store/auth-actions";
 import { useAuthSelector } from "./store/hooks";
@@ -17,6 +19,14 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "cars", element: <CarsListPage /> },
       { path: "cars/:carId", element: <CarPage /> },
+      {
+        path: "account",
+        element: (
+          <ProtectedRoute>
+            <AccountPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
@@ -27,6 +37,7 @@ const App = () => {
   useLayoutEffect(() => {
     authInterceptor(token);
   }, [token]);
+
   return <RouterProvider router={router} />;
 };
 

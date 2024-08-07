@@ -4,16 +4,18 @@ import { Button, Form, Input, message } from "antd";
 import { useInput } from "../hooks/useInput";
 
 import { openModal } from "../store/modal-slice";
-import { useModalDispatch } from "../store/hooks";
+import { useModalDispatch, useUserDispatch } from "../store/hooks";
 
 import {
   validateEmail,
   validatePassword,
   validateName,
 } from "../util/validation";
+import { signup } from "../store/user-actions";
 
 const Signup = () => {
   const modalDispatch = useModalDispatch();
+  const userDispatch = useUserDispatch();
 
   const {
     value: FnameValue,
@@ -49,7 +51,7 @@ const Signup = () => {
 
   const handleFinish = () => {
     if (isEmailValid && isPasswordValid && isFnameValid && isLnameValid) {
-      message.success("Login Successful!");
+      userDispatch(signup(emailValue, passwordValue, FnameValue, LnameValue));
 
       console.log(FnameValue);
       console.log(LnameValue);
