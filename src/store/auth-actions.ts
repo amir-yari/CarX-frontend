@@ -4,7 +4,7 @@ import { authActions } from "./auth-slice";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://carxapi-h5d5fhhbc4hpc5fc.eastus-01.azurewebsites.net",
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
 });
 
