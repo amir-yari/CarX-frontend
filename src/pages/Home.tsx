@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { Image, Form, Input, DatePicker } from "antd";
+import { Image, Form, Input, DatePicker, Button, GetProps } from "antd";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -11,8 +11,25 @@ import { useFilterDispatch, useFilterSelector } from "../store/hooks";
 import { filterActions } from "../store/filter-slice";
 
 const { RangePicker } = DatePicker;
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+
+const disabledRangeTime: RangePickerProps["disabledTime"] = () => {
+  return {
+    disabledHours: () => [],
+    disabledMinutes: () => {
+      const minutes = [];
+      for (let i = 0; i < 60; i++) {
+        if (i % 30 !== 0) {
+          minutes.push(i);
+        }
+      }
+      return minutes;
+    },
+  };
+};
 
 export default function Home() {
+  const navigate = useNavigate();
   const filter = useFilterSelector((state) => state.filter);
   const filterDispatch = useFilterDispatch();
 
@@ -25,22 +42,22 @@ export default function Home() {
     [1, 0.5, 0.5, 0]
   );
 
-  const yText = useTransform(scrollY, [0, 200, 300, 500], [0, 50, 50, 300]);
-  const scaleText = useTransform(scrollY, [0, 300], [1, 1.5]);
+  // const yText = useTransform(scrollY, [0, 200, 300, 500], [0, 50, 50, 300]);
+  // const scaleText = useTransform(scrollY, [0, 300], [1, 1.5]);
 
   const handleFinish = (allValues: any) => {
-    const { location, dateRange, priceRange } = allValues;
+    const { location, dateRange } = allValues;
 
     filterDispatch(
       filterActions.setFilters({
         ...filter,
-        location: location || "",
-        startDate: dateRange ? dateRange[0]?.format("YYYY-MM-DD") : "",
-        endDate: dateRange ? dateRange[1]?.format("YYYY-MM-DD") : "",
-        minPrice: priceRange ? priceRange[0] : 0,
-        maxPrice: priceRange ? priceRange[1] : 200,
+        location: location ? location : filter.location,
+        startDate: dateRange ? dateRange[0].$d.toISOString() : filter.startDate,
+        endDate: dateRange ? dateRange[1].$d.toISOString() : filter.endDate,
       })
     );
+
+    navigate("/cars");
   };
 
   return (
@@ -69,8 +86,8 @@ export default function Home() {
       <motion.div
         id="welcome-header-content"
         style={{
-          scale: scaleText,
-          y: yText,
+          // scale: scaleText,
+          // y: yText,
           color: "white",
           position: "absolute",
           left: "20%",
@@ -100,7 +117,9 @@ export default function Home() {
 
           <Form.Item name="dateRange" id="dateRange" className="p-4">
             <RangePicker
-              showTime
+              showTime={{
+                hideDisabledOptions: true,
+              }}
               showHour
               showMinute
               id="dateRangePicker"
@@ -110,20 +129,25 @@ export default function Home() {
                   ? [filter.startDate, filter.endDate]
                   : ["Start Date", "End Date"]
               }
+              disabledTime={disabledRangeTime}
             />
           </Form.Item>
+          <Form.Item>
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 500 }}
+            >
+              <Button
+                className="inline-block px-4 bg-white text-black border border-black rounded-md mt-4"
+                type="primary"
+                htmlType="submit"
+                id="submitButton"
+              >
+                Explore Cars
+              </Button>
+            </motion.div>
+          </Form.Item>
         </Form>
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          transition={{ type: "spring", stiffness: 500 }}
-        >
-          <Link
-            to="/cars"
-            className="inline-block px-4 py-2 bg-white text-black border border-black rounded-md mt-4"
-          >
-            Explore Cars
-          </Link>
-        </motion.div>
       </motion.div>
 
       <motion.div>

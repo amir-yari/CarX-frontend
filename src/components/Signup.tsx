@@ -3,7 +3,7 @@ import { Button, Form, Input, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
-import { openModal } from "../store/modal-slice";
+import { closeModal, openModal } from "../store/modal-slice";
 import { useModalDispatch, useUserDispatch } from "../store/hooks";
 
 import {
@@ -11,7 +11,7 @@ import {
   validatePassword,
   validateName,
 } from "../util/validation";
-import { signup } from "../store/user-actions";
+import { fetchUserData, login, signup } from "../store/user-actions";
 
 const Signup = () => {
   const modalDispatch = useModalDispatch();
@@ -49,14 +49,14 @@ const Signup = () => {
     isTouched: isPasswordTouched,
   } = useInput("", validatePassword);
 
-  const handleFinish = () => {
+  const handleFinish = async () => {
     if (isEmailValid && isPasswordValid && isFnameValid && isLnameValid) {
-      userDispatch(signup(emailValue, passwordValue, FnameValue, LnameValue));
-
-      console.log(FnameValue);
-      console.log(LnameValue);
-      console.log(emailValue);
-      console.log(passwordValue);
+      await userDispatch(
+        signup(emailValue, passwordValue, FnameValue, LnameValue)
+      );
+      await userDispatch(login(emailValue, passwordValue));
+      userDispatch(fetchUserData());
+      modalDispatch(closeModal());
     } else {
       message.error("Please fix the errors in the form.");
     }

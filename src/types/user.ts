@@ -2,6 +2,7 @@ type User = {
   firstName: string;
   lastName: string;
   email: string;
+  isLoggedIn: boolean;
   // password: string;
   userId?: string;
   phone?: string;
@@ -14,7 +15,6 @@ type User = {
   DLRegion?: string;
   dob?: Date;
   profileImage?: string;
-  isLoggedIn: boolean;
 };
 
 export default User;

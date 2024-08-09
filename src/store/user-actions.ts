@@ -15,7 +15,7 @@ export const login = (email: string, password: string) => {
 
 export const googleLogin = () => {
   return async () => {
-    const googleLoginURL = "http://localhost:5173/api/v1/auth/google";
+    const googleLoginURL = "/api/v1/auth/google";
     const newWindow = window.open(googleLoginURL, "_blank");
   };
 };
@@ -41,7 +41,7 @@ export const signup = (
   lastName: string
 ) => {
   return () => {
-    api
+    return api
       .post("/api/v1/auth/signup", { email, password, firstName, lastName })
       .then((res) => {
         console.log(res.status);
@@ -62,6 +62,19 @@ export const fetchUserData = () => {
       })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
+      });
+  };
+};
+
+export const postUserData = () => {
+  return () => {
+    api
+      .post("/api/v1/")
+      .then((res) => {
+        console.log(res.status);
+      })
+      .catch((error) => {
+        console.error("Failed to post user data:", error);
       });
   };
 };

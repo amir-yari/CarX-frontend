@@ -136,6 +136,7 @@ const Root = () => {
               <Avatar
                 style={{ backgroundColor: "black" }}
                 icon={<UserOutlined />}
+                src={user.profileImage}
               />
             </Dropdown>
           ) : (

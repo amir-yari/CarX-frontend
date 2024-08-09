@@ -1,3 +1,6 @@
+import Host from "./host";
+import Review from "./review";
+
 type Car = {
   make: string;
   model: string;
@@ -17,7 +20,7 @@ type Car = {
   country: string;
   plateNumber: string;
   carId?: string;
-  hostId?: string;
+
   galleryImages?: string[];
   location?: {
     type: "Point";
@@ -27,6 +30,9 @@ type Car = {
   tripCount?: number;
   minRentDays?: number;
   maxRentDays?: number;
+  description?: string;
+  Host?: Host;
+  Review?: Review[];
 };
 
 export default Car;

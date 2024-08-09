@@ -5,8 +5,7 @@ import { useCarDispatch, useCarSelector } from "../store/hooks.ts";
 import { fetchCarData } from "../store/car-actions.ts";
 import { useFilterSelector } from "../store/hooks";
 
-import { Card, Space, Spin, Row, Col, List } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Card, Row, Col, List, Skeleton } from "antd";
 
 import Filter from "../components/Filter.tsx";
 import Car from "../types/car.ts";
@@ -22,10 +21,15 @@ const CarsList = () => {
   const filter = useFilterSelector((state) => state.filter);
 
   useEffect(() => {
-    if (isLoading) {
-      carDispatch(fetchCarData(setIsLoading));
-    }
-  }, [carDispatch, isLoading]);
+    carDispatch(
+      fetchCarData(
+        setIsLoading,
+        filter.startDate || undefined,
+        filter.endDate || undefined,
+        filter.location || undefined
+      )
+    );
+  }, [carDispatch, filter.startDate, filter.endDate, filter.location]);
 
   useEffect(() => {
     const filtered = cars.filter((car) => {
@@ -44,10 +48,6 @@ const CarsList = () => {
         ? car.fuelType.toLowerCase() === filter.fuelType.toLowerCase()
         : true;
 
-      const matchesLocation = filter.location
-        ? car.city.toLowerCase() === filter.location.toLowerCase()
-        : true;
-
       const matchesMinPrice = filter.minPrice
         ? car.price >= filter.minPrice
         : true;
@@ -55,20 +55,10 @@ const CarsList = () => {
         ? car.price <= filter.maxPrice
         : true;
 
-      // const matchesStartDate = filter.startDate
-      //   ? new Date(car.date) >= new Date(filter.startDate)
-      //   : true;
-      // const matchesEndDate = filter.endDate
-      //   ? new Date(car.date) <= new Date(filter.endDate)
-      //   : true;
-
       return (
         matchesType &&
         matchesMake &&
         matchesFuelType &&
-        matchesLocation &&
-        // matchesStartDate &&
-        // matchesEndDate &&
         matchesMinPrice &&
         matchesMaxPrice
       );
@@ -82,12 +72,10 @@ const CarsList = () => {
       <Row>
         <Filter />
       </Row>
-      <Row className="h-screen">
+      <Row className="h-screen md:flex  md:flex-row">
         <Col span={14} className="overflow-scroll h-screen p-2">
           {isLoading ? (
-            <Space className="flex justify-center pt-12">
-              <Spin indicator={<LoadingOutlined spin />} size="large" />
-            </Space>
+            <Skeleton loading={isLoading} active></Skeleton>
           ) : (
             <List
               itemLayout="vertical"
@@ -96,6 +84,7 @@ const CarsList = () => {
               renderItem={(car) => (
                 <NavLink to={`/cars/${car.carId}`}>
                   <List.Item key={car.carId}>
+                    {" "}
                     <Card cover={<img alt="example" src={car.headerImage} />}>
                       <Meta title={car.make} description={car.model} />
                     </Card>
@@ -105,7 +94,7 @@ const CarsList = () => {
             />
           )}
         </Col>
-        <Col span={10}></Col>
+        <Col span={10}>{/* Content for the second column */}</Col>
       </Row>
     </>
   );

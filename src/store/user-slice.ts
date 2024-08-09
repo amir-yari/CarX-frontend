@@ -14,10 +14,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser(state, action: PayloadAction<User>) {
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
-      state.email = action.payload.email;
-      state.isLoggedIn = true;
+      return { ...state, ...action.payload, isLoggedIn: true };
+    },
+    setUserInfo(state, action: PayloadAction<User>) {
+      return { ...state, ...action.payload };
     },
     logoutUser() {
       return initialState;

@@ -34,7 +34,6 @@ const Login = () => {
       await userDispatch(login(emailValue, passwordValue));
       userDispatch(fetchUserData());
       modalDispatch(closeModal());
-      console.log(emailValue, passwordValue);
     } else {
       message.error("Please fix the errors in the form.");
     }

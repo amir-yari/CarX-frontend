@@ -4,22 +4,33 @@ import { carActions } from "./car-slice";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL:import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
 });
 
 export const fetchCarData = (
-  setIsLoading: (value: React.SetStateAction<boolean>) => void
+  setIsLoading: (value: React.SetStateAction<boolean>) => void,
+  availableFrom?: string,
+  availableTo?: string,
+  city?: string
 ) => {
   return (dispatch: AppDispatch) => {
+    setIsLoading(true);
     api
-      .get("/api/v1/cars")
+      .get("/api/v1/cars", {
+        params: {
+          availableFrom,
+          availableTo,
+          city,
+        },
+      })
       .then((res) => {
         dispatch(carActions.setCars(res.data));
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Failed to fetch car data:", error);
+        setIsLoading(false);
       });
   };
 };

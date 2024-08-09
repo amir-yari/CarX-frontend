@@ -7,6 +7,7 @@ import {
   Button,
   Row,
   Modal,
+  GetProps,
 } from "antd";
 
 import { openModal, closeModal } from "../store/modal-slice";
@@ -17,6 +18,22 @@ import { filterActions } from "../store/filter-slice";
 import FilterModal from "./FilterModal";
 
 const { RangePicker } = DatePicker;
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+
+const disabledRangeTime: RangePickerProps["disabledTime"] = () => {
+  return {
+    disabledHours: () => [],
+    disabledMinutes: () => {
+      const minutes = [];
+      for (let i = 0; i < 60; i++) {
+        if (i % 30 !== 0) {
+          minutes.push(i);
+        }
+      }
+      return minutes;
+    },
+  };
+};
 
 const Filter = () => {
   const modalDispatch = useModalDispatch();
@@ -39,11 +56,11 @@ const Filter = () => {
     filterDispatch(
       filterActions.setFilters({
         ...filter,
-        location: location || "",
-        startDate: dateRange ? dateRange[0]?.format("YYYY-MM-DD") : "",
-        endDate: dateRange ? dateRange[1]?.format("YYYY-MM-DD") : "",
-        minPrice: priceRange ? priceRange[0] : 0,
-        maxPrice: priceRange ? priceRange[1] : 200,
+        location: location || filter.location,
+        startDate: dateRange ? dateRange[0].$d.toISOString() : filter.startDate,
+        endDate: dateRange ? dateRange[1].$d.toISOString() : filter.endDate,
+        minPrice: priceRange ? priceRange[0] : filter.minPrice,
+        maxPrice: priceRange ? priceRange[1] : filter.maxPrice,
       })
     );
   };
@@ -87,6 +104,11 @@ const Filter = () => {
 
           <Form.Item name="dateRange" id="dateRange" className="p-4">
             <RangePicker
+              showTime={{
+                hideDisabledOptions: true,
+              }}
+              showHour
+              showMinute
               id="dateRangePicker"
               style={{ width: "100%" }}
               placeholder={
@@ -94,6 +116,7 @@ const Filter = () => {
                   ? [filter.startDate, filter.endDate]
                   : ["Start Date", "End Date"]
               }
+              disabledTime={disabledRangeTime}
             />
           </Form.Item>
           <div className="p-4">

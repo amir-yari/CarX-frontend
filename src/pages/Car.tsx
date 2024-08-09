@@ -15,6 +15,9 @@ import {
   Space,
   Spin,
   Avatar,
+  GetProps,
+  List,
+  Drawer,
 } from "antd";
 import { UserOutlined, LoadingOutlined } from "@ant-design/icons";
 
@@ -28,8 +31,27 @@ import {
 import { fetchCarDataById } from "../store/car-actions.ts";
 import { openModal } from "../store/modal-slice.ts";
 
+import Summary from "../components/Summary.tsx";
+
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
+type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+
+const disabledRangeTime: RangePickerProps["disabledTime"] = () => {
+  return {
+    disabledHours: () => [],
+    disabledMinutes: () => {
+      const minutes = [];
+      for (let i = 0; i < 60; i++) {
+        if (i % 30 !== 0) {
+          minutes.push(i);
+        }
+      }
+      return minutes;
+    },
+  };
+};
+
 const contentStyle: React.CSSProperties = {
   margin: 0,
   height: "15rem",
@@ -56,8 +78,22 @@ const Car = () => {
   const userIsLoggedIn = useUserSelector((state) => state.user.isLoggedIn);
   const modalDispatch = useModalDispatch();
 
-  const handleCheckout = () => {
-    !userIsLoggedIn && modalDispatch(openModal("login"));
+  const handleContinue = () => {
+    if (!userIsLoggedIn) {
+      modalDispatch(openModal("login"));
+    } else {
+      showDrawer();
+    }
+  };
+
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
   };
 
   if (isLoading) {
@@ -78,105 +114,147 @@ const Car = () => {
   ];
 
   return (
-    <div className="px-4 md:px-20 py-4">
-      <Image.PreviewGroup items={carImages}>
-        <Image
-          src={selectedCar.headerImage}
-          alt={`Image of ${selectedCar.price} ${selectedCar.model}`}
-          style={{
-            objectFit: "cover",
-            maxHeight: "24rem",
-            width: "100vw",
-            borderRadius: "1rem",
-          }}
-        />
-      </Image.PreviewGroup>
+    <>
+      <div className="px-4 md:px-20 py-4">
+        <Image.PreviewGroup items={carImages}>
+          <Image
+            src={selectedCar.headerImage}
+            alt={`Image of ${selectedCar.make} ${selectedCar.model}`}
+            style={{
+              objectFit: "cover",
+              maxHeight: "24rem",
+              width: "100vw",
+              borderRadius: "1rem",
+            }}
+          />
+        </Image.PreviewGroup>
 
-      <Row className="flex flex-col md:flex-row">
-        <Col span={24} md={16}>
-          <Title className="text-center md:text-left">{`${selectedCar.make} ${selectedCar.model}`}</Title>
-          <Descriptions
-            contentStyle={{ paddingTop: "0.25rem" }}
-            colon={false}
-            title="Hosted By"
-            items={[
-              {
-                label: <Avatar icon={<UserOutlined />} />,
-                children: "Hassan Kose",
-              },
-            ]}
-          />
-          <Descriptions
-            title="Description"
-            items={[
-              {
-                children:
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-              },
-            ]}
-          />
-        </Col>
-        <Col span={24} md={8}>
-          <Row justify="center">
-            <Title level={2} className="text-center">
-              {`$${selectedCar.price} total`}
-            </Title>
-          </Row>
-          <Divider />
-          <Row justify="center">
-            <Form
-              id="filter-form"
-              name="filter"
-              initialValues={{ remember: true }}
-            >
-              <Form.Item name="dateRange" id="dateRange">
-                <RangePicker
-                  id="dateRangePicker"
-                  placeholder={[filter.startDate, filter.endDate]}
-                  className="w-full"
+        <Row className="flex flex-col md:flex-row">
+          <Col span={24} md={16}>
+            <Title className="text-center md:text-left">{`${selectedCar.make} ${selectedCar.model}`}</Title>
+            <Descriptions
+              contentStyle={{ paddingTop: "2rem" }}
+              colon={false}
+              title="Hosted By"
+              items={[
+                {
+                  label: (
+                    <Avatar
+                      size={100}
+                      icon={<UserOutlined />}
+                      src={selectedCar.Host?.profileImage}
+                    />
+                  ),
+                  children: (
+                    <Title level={3}>
+                      {`${selectedCar.Host?.firstName} ${selectedCar.Host?.lastName}`}
+                    </Title>
+                  ),
+                },
+              ]}
+            />
+            <Descriptions
+              title="Description"
+              items={[
+                {
+                  children: selectedCar.description,
+                },
+              ]}
+            />
+            <Descriptions title="Reviews">
+              <Descriptions.Item>
+                <List
+                  itemLayout="vertical"
+                  size="small"
+                  dataSource={selectedCar.Review}
+                  renderItem={(review) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<Avatar src={review.User.profileImage} />}
+                        // title={}
+                        description={review.comment}
+                      />
+                    </List.Item>
+                  )}
                 />
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  className="mt-2 w-full"
-                  type="primary"
-                  htmlType="submit"
-                  id="submitButton"
-                  onClick={handleCheckout}
-                >
-                  Checkout
-                </Button>
-              </Form.Item>
-            </Form>
-          </Row>
-          <Divider />
-          <Row justify="center">
-            <div className="w-full md:w-40 h-60 bg-white">
-              <Carousel fade arrows={true} infinite={false}>
-                <div>
-                  <Title
-                    level={2}
-                    style={contentStyle}
-                    className="bg-purple-900 text-center"
+              </Descriptions.Item>
+            </Descriptions>
+          </Col>
+          <Col span={24} md={8}>
+            <Row justify="center">
+              <Title level={2} className="text-center">
+                {`$${selectedCar.price} total`}
+              </Title>
+            </Row>
+            <Divider />
+            <Row justify="center">
+              <Form
+                id="filter-form"
+                name="filter"
+                initialValues={{ remember: true }}
+              >
+                <Form.Item name="dateRange" id="dateRange" className="p-4">
+                  <RangePicker
+                    showTime={{
+                      hideDisabledOptions: true,
+                    }}
+                    showHour
+                    showMinute
+                    id="dateRangePicker"
+                    style={{ width: "100%" }}
+                    placeholder={
+                      filter.startDate
+                        ? [filter.startDate, filter.endDate]
+                        : ["Start Date", "End Date"]
+                    }
+                    disabledTime={disabledRangeTime}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    className="mt-2 w-full"
+                    type="primary"
+                    htmlType="submit"
+                    id="submitButton"
+                    onClick={handleContinue}
                   >
-                    1
-                  </Title>
-                </div>
-                <div>
-                  <Title
-                    level={2}
-                    style={contentStyle}
-                    className="bg-red-700 text-center"
-                  >
-                    2
-                  </Title>
-                </div>
-              </Carousel>
-            </div>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+                    Continue
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Row>
+            <Divider />
+            <Row justify="center">
+              <div className="w-full md:w-40 h-60 bg-white">
+                <Carousel fade arrows={true} infinite={false}>
+                  <div>
+                    <Title
+                      level={2}
+                      style={contentStyle}
+                      className="bg-purple-900 text-center"
+                    >
+                      1
+                    </Title>
+                  </div>
+                  <div>
+                    <Title
+                      level={2}
+                      style={contentStyle}
+                      className="bg-red-700 text-center"
+                    >
+                      2
+                    </Title>
+                  </div>
+                </Carousel>
+              </div>
+            </Row>
+          </Col>
+        </Row>
+      </div>
+      <Drawer size="large" title="Order Summary" onClose={onClose} open={open}>
+        <Summary />
+      </Drawer>
+    </>
   );
 };
 

@@ -38,9 +38,9 @@ const FilterModal = () => {
     filterDispatch(
       filterActions.setFilters({
         ...filter,
-        type: carType,
-        make: carMake ? carMake : [],
-        fuelType: fuelType,
+        type: carType ? carType : filter.type,
+        make: carMake ? carMake : filter.make,
+        fuelType: fuelType ? fuelType : filter.fuelType,
       })
     );
   };
