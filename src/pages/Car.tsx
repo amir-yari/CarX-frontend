@@ -129,7 +129,7 @@ const Car = () => {
           />
         </Image.PreviewGroup>
 
-        <Row className="flex flex-col md:flex-row">
+        <Row className="pt-4 flex flex-col md:flex-row">
           <Col span={24} md={16}>
             <Title className="text-center md:text-left">{`${selectedCar.make} ${selectedCar.model}`}</Title>
             <Descriptions
@@ -164,16 +164,23 @@ const Car = () => {
             <Descriptions title="Reviews">
               <Descriptions.Item>
                 <List
+                  className="w-full"
                   itemLayout="vertical"
                   size="small"
-                  dataSource={selectedCar.Review}
+                  pagination={{ pageSize: 4, align: "center" }}
+                  dataSource={selectedCar.Reviews}
                   renderItem={(review) => (
-                    <List.Item>
+                    <List.Item key={review.reviewId}>
                       <List.Item.Meta
-                        avatar={<Avatar src={review.User.profileImage} />}
-                        // title={}
+                        avatar={
+                          <Avatar src={review.User.profileImage} size={60} />
+                        }
+                        title={review.User.firstName}
                         description={review.comment}
                       />
+                      {review.hostReply && (
+                        <p>{`Host reply: ${review.hostReply}`}</p>
+                      )}
                     </List.Item>
                   )}
                 />
@@ -251,8 +258,8 @@ const Car = () => {
           </Col>
         </Row>
       </div>
-      <Drawer size="large" title="Order Summary" onClose={onClose} open={open}>
-        <Summary />
+      <Drawer title="Order Summary" onClose={onClose} open={open}>
+        <Summary car={selectedCar} />
       </Drawer>
     </>
   );

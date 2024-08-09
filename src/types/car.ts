@@ -32,7 +32,7 @@ type Car = {
   maxRentDays?: number;
   description?: string;
   Host?: Host;
-  Review?: Review[];
+  Reviews?: Review[];
 };
 
 export default Car;

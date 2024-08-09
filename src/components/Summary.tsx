@@ -1,11 +1,57 @@
 import { Link } from "react-router-dom";
 
-import { Button } from "antd";
+import Car from "../types/car";
 
-const Summary = () => (
-  <Button>
-    <Link to={"/success"}>Checkout</Link>
-  </Button>
-);
+import { useFilterSelector } from "../store/hooks";
+
+import useCalculatePeriod from "../hooks/useCalculatePeriod";
+import useFormatDate from "../hooks/useFormatDate";
+
+import { Button, Descriptions, Divider, Typography, Image } from "antd";
+
+const { Title, Text } = Typography;
+
+const Summary = ({ car }: { car: Car }) => {
+  const filter = useFilterSelector((state) => state.filter);
+
+  const period = useCalculatePeriod(filter.startDate, filter.endDate);
+  const startDate = useFormatDate(filter.startDate);
+  const endDate = useFormatDate(filter.endDate);
+
+  return (
+    <div>
+      <Image
+        preview={false}
+        src={car.headerImage}
+        alt={`Image of ${car.make} ${car.model}`}
+        style={{
+          borderRadius: "1rem",
+        }}
+      />
+      <Title level={3}>{`${car.make} ${car.model}`}</Title>
+      <Descriptions column={1}>
+        <Descriptions.Item label="Host">
+          {`${car.Host?.firstName} ${car.Host?.lastName}`}
+        </Descriptions.Item>
+
+        <Descriptions.Item label="Start Date">
+          {startDate || "Not Selected"}
+        </Descriptions.Item>
+
+        <Descriptions.Item label="End Date">
+          {endDate || "Not Selected"}
+        </Descriptions.Item>
+
+        <Descriptions.Item label="Total Price">
+          <Text strong>{`$${car.price * period}`}</Text>
+        </Descriptions.Item>
+      </Descriptions>
+      <Divider />
+      <Button type="primary">
+        <Link to={"/success"}>Checkout</Link>
+      </Button>
+    </div>
+  );
+};
 
 export default Summary;
