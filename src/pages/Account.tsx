@@ -77,6 +77,7 @@ const Account = () => {
       })
     );
     message.success("Saved");
+    console.log(fileList);
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>

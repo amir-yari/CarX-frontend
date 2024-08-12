@@ -113,6 +113,8 @@ const Car = () => {
     ...(selectedCar.galleryImages || []),
   ];
 
+  console.log(selectedCar);
+
   return (
     <>
       <div className="px-4 md:px-20 py-4">
@@ -258,7 +260,7 @@ const Car = () => {
           </Col>
         </Row>
       </div>
-      <Drawer title="Order Summary" onClose={onClose} open={open}>
+      <Drawer title="Booking Summary" onClose={onClose} open={open}>
         <Summary car={selectedCar} />
       </Drawer>
     </>

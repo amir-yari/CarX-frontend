@@ -9,6 +9,7 @@ import { Card, Row, Col, List, Skeleton } from "antd";
 
 import Filter from "../components/Filter.tsx";
 import Car from "../types/car.ts";
+import Map from "../components/carMap";
 
 const { Meta } = Card;
 
@@ -72,20 +73,27 @@ const CarsList = () => {
       <Row>
         <Filter />
       </Row>
-      <Row className="h-screen md:flex  md:flex-row">
-        <Col span={14} className="overflow-scroll h-screen p-2">
+      <Row className="flex flex-col md:flex-row">
+        <Col className="w-full md:w-1/2 overflow-scroll p-2 h-[40rem]">
           {isLoading ? (
             <Skeleton loading={isLoading} active></Skeleton>
           ) : (
             <List
               itemLayout="vertical"
-              size="small"
               dataSource={filteredCars}
               renderItem={(car) => (
                 <NavLink to={`/cars/${car.carId}`}>
                   <List.Item key={car.carId}>
-                    {" "}
-                    <Card cover={<img alt="example" src={car.headerImage} />}>
+                    <Card
+                      className="flex rounded-2xl"
+                      cover={
+                        <img
+                          alt="example"
+                          src={car.headerImage}
+                          style={{ borderRadius: "1rem", height: "11rem" }}
+                        />
+                      }
+                    >
                       <Meta title={car.make} description={car.model} />
                     </Card>
                   </List.Item>
@@ -94,7 +102,11 @@ const CarsList = () => {
             />
           )}
         </Col>
-        <Col span={10}>{/* Content for the second column */}</Col>
+        <Col className="w-full md:w-1/2 p-2">
+          <div className="rounded-xl">
+            <Map />
+          </div>
+        </Col>
       </Row>
     </>
   );

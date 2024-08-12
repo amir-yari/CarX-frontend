@@ -14,9 +14,16 @@ const { Title, Text } = Typography;
 const Summary = ({ car }: { car: Car }) => {
   const filter = useFilterSelector((state) => state.filter);
 
-  const period = useCalculatePeriod(filter.startDate, filter.endDate);
-  const startDate = useFormatDate(filter.startDate);
-  const endDate = useFormatDate(filter.endDate);
+  const period =
+    filter.startDate && filter.endDate
+      ? useCalculatePeriod(filter.startDate, filter.endDate)
+      : undefined;
+
+  const startDate = filter.startDate
+    ? useFormatDate(filter.startDate)
+    : undefined;
+
+  const endDate = filter.endDate ? useFormatDate(filter.endDate) : undefined;
 
   return (
     <div>
@@ -43,11 +50,13 @@ const Summary = ({ car }: { car: Car }) => {
         </Descriptions.Item>
 
         <Descriptions.Item label="Total Price">
-          <Text strong>{`$${car.price * period}`}</Text>
+          <Text>
+            {car.price && period ? `$${car.price * period}` : "No Price"}
+          </Text>
         </Descriptions.Item>
       </Descriptions>
       <Divider />
-      <Button type="primary">
+      <Button type="primary" className="ml-28 px-6">
         <Link to={"/success"}>Checkout</Link>
       </Button>
     </div>

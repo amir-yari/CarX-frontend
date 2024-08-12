@@ -160,9 +160,9 @@ const Root = () => {
         <Outlet />
       </Content>
 
-      <Footer className="text-center w-full">
+      {/* <Footer className="text-center w-full">
         CarX ©{new Date().getFullYear()} Created by Amir & Hassan
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 };
