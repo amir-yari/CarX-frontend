@@ -4,9 +4,10 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
 import HomePage from "./pages/Home";
 import CarsListPage from "./pages/CarsList";
+import TripsListPage from "./pages/TripsList";
 import CarPage from "./pages/Car";
 import AccountPage from "./pages/Account";
-import { CheckoutForm, Return } from "./pages/Checkout";
+import { CheckoutForm, Return } from "./components/stripe";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorPage from "./pages/Error";
 
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "cars", element: <CarsListPage /> },
+      { path: "trips", element: <TripsListPage /> },
       { path: "cars/:carId", element: <CarPage /> },
       { path: "checkout", element: <CheckoutForm /> },
       { path: "return", element: <Return /> },

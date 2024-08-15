@@ -4,9 +4,11 @@ import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import { useCarSelector, useFilterSelector } from "../store/hooks";
+
+import { Button, Result } from "antd";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -34,7 +36,9 @@ export const CheckoutForm = () => {
       },
     })
       .then((res) => res.json())
-      .then((data) => data.clientSecret);
+      .then((data) => {
+        return data.clientSecret;
+      });
   }, []);
 
   const options = { fetchClientSecret };
@@ -50,18 +54,16 @@ export const CheckoutForm = () => {
 
 export const Return = () => {
   const [status, setStatus] = useState(null);
-  const [customerEmail, setCustomerEmail] = useState("");
 
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const sessionId = urlParams.get("session_id");
 
-    fetch(`/session-status?session_id=${sessionId}`)
+    fetch(`/api/v1/payments/session-status?session_id=${sessionId}`)
       .then((res) => res.json())
       .then((data) => {
         setStatus(data.status);
-        setCustomerEmail(data.customer_email);
       });
   }, []);
 
@@ -71,13 +73,15 @@ export const Return = () => {
 
   if (status === "complete") {
     return (
-      <section id="success">
-        <p>
-          We appreciate your business! A confirmation email will be sent to{" "}
-          {customerEmail}. If you have any questions, please email{" "}
-          <a href="mailto:orders@example.com">orders@example.com</a>.
-        </p>
-      </section>
+      <Result
+        status="success"
+        title="Successfully rented your car!"
+        extra={
+          <Button>
+            <Link to={"/"}>Back to Home Page</Link>
+          </Button>
+        }
+      />
     );
   }
 
