@@ -57,7 +57,7 @@ const Summary = ({ car }: { car: Car }) => {
       </Descriptions>
       <Divider />
       <Button type="primary" className="ml-28 px-6">
-        <Link to={"/success"}>Checkout</Link>
+        <Link to={"/checkout"}>Go to Checkout</Link>
       </Button>
     </div>
   );

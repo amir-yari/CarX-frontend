@@ -1,3 +1,5 @@
+import User from "../types/user";
+
 import { userActions } from "./user-slice";
 import { AppDispatch } from "./store";
 
@@ -55,7 +57,7 @@ export const signup = (
 export const fetchUserData = () => {
   return (dispatch: AppDispatch) => {
     api
-      .get("/api/v1/me")
+      .get("/api/v1/accounts/profile")
       .then((res) => {
         console.log(res.data);
         dispatch(userActions.setUser(res.data));
@@ -66,15 +68,41 @@ export const fetchUserData = () => {
   };
 };
 
-export const postUserData = () => {
-  return () => {
-    api
-      .post("/api/v1/")
+export const patchUserData = (user: User) => {
+  return (dispatch: AppDispatch) => {
+    return api
+      .patch("/api/v1/accounts/profile", {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        DLN: user.DLN,
+        DLExpirationDate: user.DLExpirationDate,
+        dob: user.dob,
+      })
       .then((res) => {
-        console.log(res.status);
+        dispatch(userActions.setUserInfo(res.data));
+        return res;
       })
       .catch((error) => {
         console.error("Failed to post user data:", error);
       });
+  };
+};
+
+export const fetchUserLocation = () => {
+  return (dispatch: AppDispatch) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          dispatch(userActions.setUserLocation({ latitude, longitude }));
+        },
+        (error) => {
+          console.error("Error fetching user location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   };
 };

@@ -14,8 +14,9 @@ import { openModal, closeModal } from "../store/modal-slice";
 import { useModalDispatch, useModalSelector } from "../store/hooks";
 import { useFilterDispatch, useFilterSelector } from "../store/hooks";
 import { filterActions } from "../store/filter-slice";
-
 import FilterModal from "./FilterModal";
+
+import { formatDate, getTodayDate, getTomorrowDate } from "../util/formatDate";
 
 const { RangePicker } = DatePicker;
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
@@ -113,8 +114,8 @@ const Filter = () => {
               style={{ width: "100%" }}
               placeholder={
                 filter.startDate
-                  ? [filter.startDate, filter.endDate]
-                  : ["Start Date", "End Date"]
+                  ? [formatDate(filter.startDate), formatDate(filter.endDate)]
+                  : [getTodayDate(), getTomorrowDate()]
               }
               disabledTime={disabledRangeTime}
             />

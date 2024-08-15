@@ -10,11 +10,15 @@ type User = {
   passChangedRequestedOn?: Date;
   passChangeHash?: string;
   DLN?: string;
-  DLExpirationDate?: Date;
+  DLExpirationDate?: string;
   DLCountry?: string;
   DLRegion?: string;
-  dob?: Date;
+  dob?: string;
   profileImage?: string;
+  location?: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
 export default User;

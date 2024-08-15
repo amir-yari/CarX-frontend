@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "./pages/Root";
@@ -5,9 +6,12 @@ import HomePage from "./pages/Home";
 import CarsListPage from "./pages/CarsList";
 import CarPage from "./pages/Car";
 import AccountPage from "./pages/Account";
-import SuccessPage from "./pages/Success";
+import { CheckoutForm, Return } from "./pages/Checkout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorPage from "./pages/Error";
+
+import { useUserDispatch } from "./store/hooks";
+import { fetchUserLocation } from "./store/user-actions";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +22,8 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: "cars", element: <CarsListPage /> },
       { path: "cars/:carId", element: <CarPage /> },
-      { path: "success", element: <SuccessPage /> },
+      { path: "checkout", element: <CheckoutForm /> },
+      { path: "return", element: <Return /> },
       {
         path: "account",
         element: (
@@ -32,6 +37,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const userDispatch = useUserDispatch();
+  useEffect(() => {
+    userDispatch(fetchUserLocation());
+  }, [userDispatch]);
+
   return <RouterProvider router={router} />;
 };
 

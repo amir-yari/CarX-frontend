@@ -7,6 +7,7 @@ const initialState: User = {
   firstName: "",
   lastName: "",
   email: "",
+  location: undefined,
 };
 
 export const userSlice = createSlice({
@@ -21,6 +22,12 @@ export const userSlice = createSlice({
     },
     logoutUser() {
       return initialState;
+    },
+    setUserLocation(
+      state,
+      action: PayloadAction<{ latitude: number; longitude: number }>
+    ) {
+      return { ...state, location: action.payload };
     },
   },
 });

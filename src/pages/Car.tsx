@@ -27,11 +27,18 @@ import {
   useCarDispatch,
   useUserSelector,
   useModalDispatch,
+  useFilterDispatch,
 } from "../store/hooks.ts";
 import { fetchCarDataById } from "../store/car-actions.ts";
 import { openModal } from "../store/modal-slice.ts";
+import { filterActions } from "../store/filter-slice.ts";
 
 import Summary from "../components/Summary.tsx";
+import {
+  formatDate,
+  getTodayDate,
+  getTomorrowDate,
+} from "../util/formatDate.ts";
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -63,6 +70,7 @@ const contentStyle: React.CSSProperties = {
 const Car = () => {
   const [isLoading, setIsLoading] = useState(true);
   const filter = useFilterSelector((state) => state.filter);
+  const filterDispatch = useFilterDispatch();
   const { carId } = useParams();
   const carDispatch = useCarDispatch();
 
@@ -113,7 +121,17 @@ const Car = () => {
     ...(selectedCar.galleryImages || []),
   ];
 
-  console.log(selectedCar);
+  const handleChange = (allValues: any) => {
+    const { dateRange } = allValues;
+
+    filterDispatch(
+      filterActions.setFilters({
+        ...filter,
+        startDate: dateRange ? dateRange[0].$d.toISOString() : filter.startDate,
+        endDate: dateRange ? dateRange[1].$d.toISOString() : filter.endDate,
+      })
+    );
+  };
 
   return (
     <>
@@ -201,6 +219,7 @@ const Car = () => {
                 id="filter-form"
                 name="filter"
                 initialValues={{ remember: true }}
+                onValuesChange={handleChange}
               >
                 <Form.Item name="dateRange" id="dateRange" className="p-4">
                   <RangePicker
@@ -213,8 +232,11 @@ const Car = () => {
                     style={{ width: "100%" }}
                     placeholder={
                       filter.startDate
-                        ? [filter.startDate, filter.endDate]
-                        : ["Start Date", "End Date"]
+                        ? [
+                            formatDate(filter.startDate),
+                            formatDate(filter.endDate),
+                          ]
+                        : [getTodayDate(), getTomorrowDate()]
                     }
                     disabledTime={disabledRangeTime}
                   />

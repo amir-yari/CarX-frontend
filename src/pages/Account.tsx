@@ -8,8 +8,8 @@ import {
   Upload,
   DatePicker,
   Typography,
-  message,
   UploadFile,
+  message,
   UploadProps,
 } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -18,11 +18,12 @@ import { useInput } from "../hooks/useInput";
 import { validateName } from "../util/validation";
 
 import { useUserDispatch, useUserSelector } from "../store/hooks";
-import { userActions } from "../store/user-slice";
+import { patchUserData } from "../store/user-actions";
 
 const { Title } = Typography;
 
 const Account = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const userDispatch = useUserDispatch();
@@ -58,26 +59,26 @@ const Account = () => {
   } = useInput("", validateName);
 
   const handleFinish = (allValues: any) => {
-    const { fname, lname, dob, phoneNumber, expiryDate, licenseNumber } =
+    const { firstName, lastName, phone, dob, DLN, DLExpirationDate } =
       allValues;
+
     userDispatch(
-      userActions.setUserInfo({
+      patchUserData({
         ...user,
-        firstName: fname ? fname : user.firstName,
-        lastName: lname ? lname : user.lastName,
-        phone: phoneNumber ? phoneNumber : user.phone,
-        DLN: licenseNumber ? licenseNumber : user.DLN,
-        dob: dob ? dob.$d.toISOString() : user.dob,
-        DLExpirationDate: expiryDate
-          ? expiryDate.$d.toISOString()
-          : user.DLExpirationDate,
-        profileImage: fileList![0].thumbUrl
-          ? fileList![0].thumbUrl
-          : user.profileImage,
+        firstName: firstName ?? user.firstName,
+        lastName: lastName ?? user.lastName,
+        phone: phone ?? user.phone,
+        DLN: DLN ?? user.DLN,
+        dob: dob ?? user.dob,
+        DLExpirationDate: DLExpirationDate ?? user.DLExpirationDate,
       })
-    );
-    message.success("Saved");
-    console.log(fileList);
+    ).then((res: any) => {
+      if (res.status === 200) {
+        messageApi.success("Saved");
+      } else {
+        messageApi.error("error");
+      }
+    });
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
@@ -92,6 +93,7 @@ const Account = () => {
 
   return (
     <div className="px-16 mx-16">
+      {contextHolder}
       <Form
         id="signup-form"
         name="signup"
@@ -104,7 +106,9 @@ const Account = () => {
         <Form.Item name="profileImage" id="profile-image-input">
           <ImgCrop>
             <Upload
-              action=""
+              action="/api/v1/accounts/profile"
+              name="profileImage"
+              method="PATCH"
               listType="picture-circle"
               maxCount={1}
               fileList={fileList}
@@ -116,7 +120,7 @@ const Account = () => {
           </ImgCrop>
         </Form.Item>
         <Form.Item
-          name="fname"
+          name="firstName"
           id="fname-input"
           initialValue={user.firstName}
           validateStatus={
@@ -140,7 +144,7 @@ const Account = () => {
           />
         </Form.Item>
         <Form.Item
-          name="lname"
+          name="lastName"
           id="lname-input"
           initialValue={user.lastName}
           validateStatus={
@@ -171,10 +175,13 @@ const Account = () => {
           // validateStatus={user.dob ? "success" : "error"}
           // help={user.dob ? "" : "Please select your date of birth!"}
         >
-          <DatePicker id="dob" placeholder="Date of Birth" />
+          <DatePicker
+            id="dob"
+            placeholder={user.dob ? user.dob : "Date of Birth"}
+          />
         </Form.Item>
         <Form.Item
-          name="phoneNumber"
+          name="phone"
           id="phone-number-input"
           initialValue={user.phone}
           // validateStatus={
@@ -195,7 +202,7 @@ const Account = () => {
         </Form.Item>
 
         <Form.Item
-          name="licenseNumber"
+          name="DLN"
           id="license-number-input"
           initialValue={user.DLN}
           // validateStatus={
@@ -215,9 +222,8 @@ const Account = () => {
           />
         </Form.Item>
         <Form.Item
-          name="expiryDate"
+          name="DLExpirationDate"
           id="expiry-date-input"
-          // placeHolder={user.DLExpirationDate}
           //   validateStatus={expiryDate ? "success" : "error"}
           //   help={
           //     expiryDate
@@ -225,7 +231,12 @@ const Account = () => {
           //       : "Please select the expiry date of your Driver's License!"
           //   }
         >
-          <DatePicker id="expiryDate" placeholder="Expiry Date" />
+          <DatePicker
+            id="expiryDate"
+            placeholder={
+              user.DLExpirationDate ? user.DLExpirationDate : "Expiry Date"
+            }
+          />
         </Form.Item>
         <Form.Item id="buttons">
           <Button type="primary" htmlType="submit" id="signup-button">
