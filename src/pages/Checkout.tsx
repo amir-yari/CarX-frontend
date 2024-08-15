@@ -6,6 +6,8 @@ import {
 } from "@stripe/react-stripe-js";
 import { Navigate } from "react-router-dom";
 
+import { useCarSelector, useFilterSelector } from "../store/hooks";
+
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 // This test secret API key is a placeholder. Don't include personal details in requests with this key.
@@ -16,14 +18,16 @@ const stripePromise = loadStripe(
 );
 
 export const CheckoutForm = () => {
+  const car = useCarSelector((state) => state.car.selectedCar);
+  const filter = useFilterSelector((state) => state.filter);
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
     return fetch("/api/v1/payments/checkout-session", {
       method: "POST",
       body: JSON.stringify({
-        carId: "844fe1ae-b684-4993-892d-13238a1838c4",
-        from: "2024-08-16",
-        to: "2024-08-17",
+        carId: car?.carId,
+        from: filter.startDate,
+        to: filter.endDate,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +40,7 @@ export const CheckoutForm = () => {
   const options = { fetchClientSecret };
 
   return (
-    <div id="checkout">
+    <div id="checkout" className="p-4">
       <EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>

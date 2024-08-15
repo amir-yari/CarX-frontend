@@ -34,6 +34,7 @@ import { openModal } from "../store/modal-slice.ts";
 import { filterActions } from "../store/filter-slice.ts";
 
 import Summary from "../components/Summary.tsx";
+import { MapById } from "../components/carMap.tsx";
 import {
   formatDate,
   getTodayDate,
@@ -281,9 +282,13 @@ const Car = () => {
             </Row>
           </Col>
         </Row>
+        <Divider />
+        <Row>
+          <MapById />
+        </Row>
       </div>
       <Drawer title="Booking Summary" onClose={onClose} open={open}>
-        <Summary car={selectedCar} />
+        <Summary />
       </Drawer>
     </>
   );

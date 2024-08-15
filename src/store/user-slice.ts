@@ -7,7 +7,10 @@ const initialState: User = {
   firstName: "",
   lastName: "",
   email: "",
-  location: undefined,
+  location: {
+    latitude: undefined,
+    longitude: undefined,
+  },
 };
 
 export const userSlice = createSlice({

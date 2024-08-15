@@ -16,8 +16,8 @@ type User = {
   dob?: string;
   profileImage?: string;
   location?: {
-    latitude: number;
-    longitude: number;
+    latitude?: number;
+    longitude?: number;
   };
 };
 

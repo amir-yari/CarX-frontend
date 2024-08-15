@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 type Filter = {
   location: string;
+  isCurrentLocation: boolean;
   startDate: string;
   endDate: string;
   minPrice: number | null;
@@ -13,6 +14,7 @@ type Filter = {
 
 const initialState: Filter = {
   location: "",
+  isCurrentLocation: false,
   startDate: "",
   endDate: "",
   minPrice: 0,

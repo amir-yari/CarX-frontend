@@ -12,7 +12,9 @@ export const fetchCarData = (
   setIsLoading: (value: React.SetStateAction<boolean>) => void,
   availableFrom?: string,
   availableTo?: string,
-  city?: string
+  city?: string,
+  lat?: number,
+  lng?: number
 ) => {
   return (dispatch: AppDispatch) => {
     setIsLoading(true);
@@ -22,6 +24,8 @@ export const fetchCarData = (
           availableFrom,
           availableTo,
           city,
+          lat,
+          lng,
         },
       })
       .then((res) => {

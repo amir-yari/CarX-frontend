@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useCarSelector } from "../store/hooks";
+
 import {
   MapContainer,
   TileLayer,
@@ -33,7 +36,9 @@ function LocationMarker({
   ) : null;
 }
 
-const CarMap = () => {
+export const Map = () => {
+  const navigate = useNavigate();
+
   const cars = useCarSelector((state) => state.car.items);
   const carLocations = cars.filter((car) => car.location?.coordinates);
 
@@ -60,7 +65,15 @@ const CarMap = () => {
         ] as LatLngExpression;
 
         return (
-          <Marker key={car.carId} position={position}>
+          <Marker
+            key={car.carId}
+            position={position}
+            eventHandlers={{
+              click: () => {
+                navigate(`/cars/${car.carId}`);
+              },
+            }}
+          >
             <Tooltip>{`${car.make} ${car.model}`}</Tooltip>
           </Marker>
         );
@@ -71,4 +84,25 @@ const CarMap = () => {
   );
 };
 
-export default CarMap;
+export const MapById = () => {
+  const car = useCarSelector((state) => state.car.selectedCar);
+
+  const position = [
+    car!.location!.coordinates[1],
+    car!.location!.coordinates[0],
+  ] as LatLngExpression;
+
+  return (
+    <MapContainer
+      center={position}
+      zoom={13}
+      style={{ height: "40rem", width: "100%", borderRadius: "1rem" }}
+    >
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+      <Marker key={car!.carId} position={position}>
+        <Tooltip permanent>{`${car!.make} ${car!.model}`}</Tooltip>
+      </Marker>
+    </MapContainer>
+  );
+};

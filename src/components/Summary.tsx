@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 
-import Car from "../types/car";
-
-import { useFilterSelector } from "../store/hooks";
+import { useCarSelector, useFilterSelector } from "../store/hooks";
 
 import useCalculatePeriod from "../hooks/useCalculatePeriod";
 import useFormatDate from "../hooks/useFormatDate";
@@ -11,7 +9,8 @@ import { Button, Descriptions, Divider, Typography, Image } from "antd";
 
 const { Title, Text } = Typography;
 
-const Summary = ({ car }: { car: Car }) => {
+const Summary = () => {
+  const car = useCarSelector((state) => state.car.selectedCar);
   const filter = useFilterSelector((state) => state.filter);
 
   const period =
@@ -29,16 +28,16 @@ const Summary = ({ car }: { car: Car }) => {
     <div>
       <Image
         preview={false}
-        src={car.headerImage}
-        alt={`Image of ${car.make} ${car.model}`}
+        src={car!!.headerImage}
+        alt={`Image of ${car!.make} ${car!.model}`}
         style={{
           borderRadius: "1rem",
         }}
       />
-      <Title level={3}>{`${car.make} ${car.model}`}</Title>
+      <Title level={3}>{`${car!.make} ${car!.model}`}</Title>
       <Descriptions column={1}>
         <Descriptions.Item label="Host">
-          {`${car.Host?.firstName} ${car.Host?.lastName}`}
+          {`${car!.Host?.firstName} ${car!.Host?.lastName}`}
         </Descriptions.Item>
 
         <Descriptions.Item label="Start Date">
@@ -51,7 +50,9 @@ const Summary = ({ car }: { car: Car }) => {
 
         <Descriptions.Item label="Total Price">
           <Text>
-            {car.price && period ? `$${car.price * period}` : "No Price"}
+            {car!.price && period
+              ? `$${(car!.price * period).toFixed(2)}`
+              : "No Price"}
           </Text>
         </Descriptions.Item>
       </Descriptions>

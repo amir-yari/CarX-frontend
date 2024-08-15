@@ -10,7 +10,7 @@ import { CheckoutForm, Return } from "./pages/Checkout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorPage from "./pages/Error";
 
-import { useUserDispatch } from "./store/hooks";
+import { useUserDispatch, useUserSelector } from "./store/hooks";
 import { fetchUserLocation } from "./store/user-actions";
 
 const router = createBrowserRouter([
@@ -37,9 +37,14 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const userLocation = useUserSelector((state) => {
+    state.user.location;
+  });
   const userDispatch = useUserDispatch();
   useEffect(() => {
-    userDispatch(fetchUserLocation());
+    if (userLocation! === undefined) {
+      userDispatch(fetchUserLocation());
+    }
   }, [userDispatch]);
 
   return <RouterProvider router={router} />;

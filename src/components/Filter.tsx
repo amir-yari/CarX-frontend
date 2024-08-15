@@ -57,13 +57,16 @@ const Filter = () => {
     filterDispatch(
       filterActions.setFilters({
         ...filter,
-        location: location || filter.location,
+        location: location ? location : filter.location,
         startDate: dateRange ? dateRange[0].$d.toISOString() : filter.startDate,
         endDate: dateRange ? dateRange[1].$d.toISOString() : filter.endDate,
         minPrice: priceRange ? priceRange[0] : filter.minPrice,
         maxPrice: priceRange ? priceRange[1] : filter.maxPrice,
       })
     );
+    if (location && (location as string).length === 1) {
+      filterDispatch(filterActions.setFilters({ ...filter, location: "" }));
+    }
   };
 
   const handleReset = () => {
@@ -91,12 +94,7 @@ const Filter = () => {
         onValuesChange={handleChange}
       >
         <Row>
-          <Form.Item
-            name="location"
-            id="location"
-            className="p-4"
-            initialValue={filter.location}
-          >
+          <Form.Item name="location" id="location" className="p-4">
             <Input
               id="locationInput"
               placeholder={filter.location ? filter.location : "City Location"}

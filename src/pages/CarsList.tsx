@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
+
 import { NavLink } from "react-router-dom";
 
-import { useCarDispatch, useCarSelector } from "../store/hooks.ts";
+import {
+  useCarDispatch,
+  useCarSelector,
+  useFilterSelector,
+  useUserSelector,
+} from "../store/hooks.ts";
 import { fetchCarData } from "../store/car-actions.ts";
-import { useFilterSelector } from "../store/hooks";
 
 import { Card, Row, Col, List, Skeleton } from "antd";
 
 import Filter from "../components/Filter.tsx";
 import Car from "../types/car.ts";
-import Map from "../components/carMap";
+import { Map } from "../components/carMap";
+import useDebounce from "../hooks/useDebounce";
 
 const { Meta } = Card;
 
@@ -18,8 +24,22 @@ const CarsList = () => {
   const [filteredCars, setFilteredCars] = useState<Car[]>([]);
   const carDispatch = useCarDispatch();
   const cars = useCarSelector((state) => state.car.items);
-
   const filter = useFilterSelector((state) => state.filter);
+
+  const currentLocation: boolean = filter.isCurrentLocation;
+  const userLocation = useUserSelector((state) => state.user.location);
+
+  if (currentLocation && userLocation) {
+    var lat = userLocation.latitude;
+    var lng = userLocation.longitude;
+  }
+
+  if (filter.location !== "") {
+    lat = undefined;
+    lng = undefined;
+  }
+
+  const debouncedLocation = useDebounce(filter.location, 1000);
 
   useEffect(() => {
     carDispatch(
@@ -27,10 +47,12 @@ const CarsList = () => {
         setIsLoading,
         filter.startDate || undefined,
         filter.endDate || undefined,
-        filter.location || undefined
+        debouncedLocation || undefined,
+        lat || undefined,
+        lng || undefined
       )
     );
-  }, [carDispatch, filter.startDate, filter.endDate, filter.location]);
+  }, [carDispatch, filter.startDate, filter.endDate, debouncedLocation]);
 
   useEffect(() => {
     const filtered = cars.filter((car) => {

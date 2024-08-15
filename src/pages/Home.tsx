@@ -1,19 +1,40 @@
 import { useNavigate } from "react-router-dom";
 
-import { Image, Form, Input, DatePicker, Button, GetProps } from "antd";
+import {
+  Image,
+  Form,
+  DatePicker,
+  Button,
+  GetProps,
+  Layout,
+  Select,
+  SelectProps,
+} from "antd";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 
 import logoLinks from "../assets/logoLinks.json";
 import image from "../assets/image.jpg";
 
-import { useFilterDispatch, useFilterSelector } from "../store/hooks";
+import {
+  useFilterDispatch,
+  useFilterSelector,
+  useUserSelector,
+} from "../store/hooks";
 import { filterActions } from "../store/filter-slice";
 
 import { formatDate, getTodayDate, getTomorrowDate } from "../util/formatDate";
 
+const { Footer } = Layout;
 const { RangePicker } = DatePicker;
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
+
+const options: SelectProps["options"] = [];
+
+options.push({
+  value: "CurrentLocation",
+  label: "Current Location",
+});
 
 const disabledRangeTime: RangePickerProps["disabledTime"] = () => {
   return {
@@ -34,6 +55,7 @@ export default function Home() {
   const navigate = useNavigate();
   const filter = useFilterSelector((state) => state.filter);
   const filterDispatch = useFilterDispatch();
+  const userLocation = useUserSelector((state) => state.user.location);
 
   const { scrollY } = useScroll();
 
@@ -48,12 +70,33 @@ export default function Home() {
   // const scaleText = useTransform(scrollY, [0, 300], [1, 1.5]);
 
   const handleFinish = (allValues: any) => {
-    const { location, dateRange } = allValues;
+    let { location } = allValues;
+    const { dateRange } = allValues;
+    location = [];
+
+    const currentLocation: boolean = (location as Array<string>).includes(
+      "CurrentLocation"
+    );
+
+    let isCurrentLocation;
+
+    if (currentLocation && userLocation) {
+      location = undefined;
+      isCurrentLocation = true;
+    }
+    if (!currentLocation) {
+      const length = (location as Array<string>).length;
+      const city: string = (location as Array<string>)[length - 1];
+
+      location = city;
+      isCurrentLocation = false;
+    }
 
     filterDispatch(
       filterActions.setFilters({
         ...filter,
         location: location ? location : filter.location,
+        isCurrentLocation: isCurrentLocation ? true : false,
         startDate: dateRange ? dateRange[0].$d.toISOString() : filter.startDate,
         endDate: dateRange ? dateRange[1].$d.toISOString() : filter.endDate,
       })
@@ -105,15 +148,12 @@ export default function Home() {
           initialValues={{ remember: true }}
           onFinish={handleFinish}
         >
-          <Form.Item
-            name="location"
-            id="location"
-            className="p-4"
-            initialValue={filter.location}
-          >
-            <Input
-              id="locationInput"
-              placeholder={filter.location ? filter.location : "City Location"}
+          <Form.Item name="location" id="location" className="p-4">
+            <Select
+              mode="tags"
+              style={{ width: "100%" }}
+              placeholder="Location"
+              options={options}
             />
           </Form.Item>
 
@@ -164,6 +204,9 @@ export default function Home() {
           }}
         />
       </motion.div>
+      <Footer className="text-center w-full">
+        CarX ©{new Date().getFullYear()} Created by Amir & Hassan
+      </Footer>
     </div>
   );
 }

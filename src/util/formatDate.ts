@@ -5,9 +5,9 @@ export const formatDate = (dateString: string): string => {
 };
 
 export const getTodayDate = (): string => {
-  return dayjs().format("YYYY-MM-DD");
+  return dayjs().format("YYYY-MM-DD HH:mm");
 };
 
 export const getTomorrowDate = (): string => {
-  return dayjs().add(3, "day").format("YYYY-MM-DD");
+  return dayjs().add(3, "day").format("YYYY-MM-DD HH:mm");
 };

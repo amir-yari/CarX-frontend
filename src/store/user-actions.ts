@@ -26,9 +26,8 @@ export const logout = () => {
   return (dispatch: AppDispatch) => {
     api
       .get("/api/v1/auth/logout")
-      .then((res) => {
+      .then(() => {
         dispatch(userActions.logoutUser());
-        console.log(res.status);
       })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
@@ -45,9 +44,6 @@ export const signup = (
   return () => {
     return api
       .post("/api/v1/auth/signup", { email, password, firstName, lastName })
-      .then((res) => {
-        console.log(res.status);
-      })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
       });
@@ -59,7 +55,6 @@ export const fetchUserData = () => {
     api
       .get("/api/v1/accounts/profile")
       .then((res) => {
-        console.log(res.data);
         dispatch(userActions.setUser(res.data));
       })
       .catch((error) => {
