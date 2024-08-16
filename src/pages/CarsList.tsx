@@ -116,7 +116,10 @@ const CarsList = () => {
                         />
                       }
                     >
-                      <Meta title={car.make} description={car.model} />
+                      <Meta
+                        title={`${car.make} ${car.model} ${car.year}`}
+                        description={`$${car.price}`}
+                      />
                     </Card>
                   </List.Item>
                 </NavLink>

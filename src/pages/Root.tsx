@@ -51,24 +51,21 @@ const Root = () => {
       key: "1",
       label: `Hi, ${user.firstName}`,
     },
+
     {
       key: "2",
+      label: <NavLink to={"/account"}>Account</NavLink>,
+    },
+    {
+      key: "3",
+      label: <NavLink to={"/trips"}>Trips</NavLink>,
+    },
+    {
+      key: "4",
       label: (
         <Button type="text" onClick={handleLogout}>
           Logout
         </Button>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <NavLink to={"/account"}>
-          <Avatar
-            style={{ backgroundColor: "black" }}
-            icon={<UserOutlined />}
-          />
-          Account
-        </NavLink>
       ),
     },
   ];

@@ -4,7 +4,8 @@ export const validateName = (value: string) => {
 };
 
 export const validateEmail = (value: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex =
+    /^[^\s@]+@[^\s@]+\.(com|org|net|edu|gov|mil|co|io|info|biz|me|us|ca|uk|de|fr|it|es|nl|ru|cn|br|in|au|jp|kr|mx)$/i;
   return emailRegex.test(value);
 };
 

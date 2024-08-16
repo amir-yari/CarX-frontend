@@ -22,7 +22,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "cars", element: <CarsListPage /> },
-      { path: "trips", element: <TripsListPage /> },
+      {
+        path: "trips",
+        element: (
+          <ProtectedRoute>
+            <TripsListPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: "cars/:carId", element: <CarPage /> },
       { path: "checkout", element: <CheckoutForm /> },
       { path: "return", element: <Return /> },

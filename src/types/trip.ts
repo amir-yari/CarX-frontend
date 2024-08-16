@@ -6,8 +6,8 @@ type Trip = {
   Car: Car;
   User: User;
   Host: Host;
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   tripId?: string;
   paymentId?: string;
   pickupAddress?: string;

@@ -13,14 +13,12 @@ import carSlice from "./car-slice";
 import filterSlice from "./filter-slice";
 import userSlice from "./user-slice";
 import modalSlice from "./modal-slice";
-import authSlice from "./auth-slice";
 
 const rootReducer = combineReducers({
   car: carSlice.reducer,
   filter: filterSlice.reducer,
   user: userSlice.reducer,
   modal: modalSlice.reducer,
-  auth: authSlice.reducer,
 });
 
 const persistConfig = {

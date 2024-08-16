@@ -14,3 +14,7 @@
 .ant-card-cover {
   width: 50%;
 }
+
+.ant-card-meta-description {
+  white-space: pre-line;
+}

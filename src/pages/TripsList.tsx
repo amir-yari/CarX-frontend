@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { useUserSelector } from "../store/hooks.ts";
+
 import axios from "axios";
+
 import { Card, Row, Col, List, Skeleton } from "antd";
 
-const { Meta } = Card;
-
 import Trip from "../types/trip.ts";
+
+import { formatDate } from "../util/formatDate.ts";
+
+const { Meta } = Card;
 
 const TripsList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [trips, setTrips] = useState<Trip[]>([]);
-  const user = useUserSelector((state) => state.user);
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -25,13 +26,13 @@ const TripsList = () => {
       }
     };
 
-    fetchTrips(); // Call the async function
+    fetchTrips();
   }, []);
 
   return (
     <>
       <Row className="flex flex-col md:flex-row">
-        <Col className="w-full md:w-1/2 overflow-scroll p-2 h-[40rem]">
+        <Col span={24} className="w-full overflow-scroll p-2 px-28 h-[46rem]">
           {isLoading ? (
             <Skeleton loading={isLoading} active />
           ) : (
@@ -39,21 +40,28 @@ const TripsList = () => {
               itemLayout="vertical"
               dataSource={trips}
               renderItem={(trip) => (
-                <NavLink to={`/trips/${trip.tripId}`} key={trip.tripId}>
-                  <List.Item>
-                    <Card className="flex rounded-2xl">
-                      {/* Add cover image here if available */}
-                      <Meta
-                        title={`${trip.Car.make} ${trip.Car.model}`}
-                        description={`From: ${new Date(
-                          trip.from
-                        ).toLocaleDateString()} To: ${new Date(
-                          trip.to
-                        ).toLocaleDateString()}`}
+                <List.Item>
+                  <Card
+                    className="flex rounded-2xl"
+                    cover={
+                      <img
+                        alt="Car"
+                        src={trip.Car.headerImage}
+                        style={{ borderRadius: "1rem", height: "16rem" }}
                       />
-                    </Card>
-                  </List.Item>
-                </NavLink>
+                    }
+                  >
+                    <Meta
+                      title={`${trip.Car.make} ${trip.Car.model}`}
+                      description={`
+                        From: ${formatDate(trip.from)} 
+                        To: ${formatDate(trip.to)}
+                        Payment ID: ${trip.paymentId}
+                        Trip ID: ${trip.tripId}
+                      `}
+                    />
+                  </Card>
+                </List.Item>
               )}
             />
           )}

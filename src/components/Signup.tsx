@@ -163,11 +163,11 @@ const Signup = () => {
           onBlur={handlePasswordBlur}
         />
       </Form.Item>
-      <Form.Item id="forgot-password">
+      {/* <Form.Item id="forgot-password">
         <a className="signup-form-forgot" href="">
           Forgot password
         </a>
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item id="buttons">
         <Button
           type="primary"
@@ -176,8 +176,7 @@ const Signup = () => {
           id="signup-button"
         >
           Signup
-        </Button>{" "}
-        Or
+        </Button>
         <Button
           type="link"
           onClick={() => modalDispatch(openModal("login"))}

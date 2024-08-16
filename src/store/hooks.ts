@@ -19,6 +19,3 @@ export const useUserSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useModalDispatch: DispatchFunction = useDispatch;
 export const useModalSelector: TypedUseSelectorHook<RootState> = useSelector;
-
-export const useAuthDispatch: DispatchFunction = useDispatch;
-export const useAuthSelector: TypedUseSelectorHook<RootState> = useSelector;
