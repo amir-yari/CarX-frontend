@@ -17,8 +17,8 @@ export const login = (email: string, password: string) => {
 
 export const googleLogin = () => {
   return async () => {
-    const googleLoginURL = "/api/v1/auth/google";
-    const newWindow = window.open(googleLoginURL, "_blank");
+    // const googleLoginURL = "/api/v1/auth/google";
+    // const newWindow = window.open(googleLoginURL, "_blank");
   };
 };
 

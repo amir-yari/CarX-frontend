@@ -26,7 +26,7 @@ import { logout } from "../store/user-actions";
 
 import logoLinks from "../assets/logoLinks.json";
 
-const { Content, Header, Footer } = Layout;
+const { Content, Header } = Layout;
 
 const Root = () => {
   const modalDispatch = useModalDispatch();

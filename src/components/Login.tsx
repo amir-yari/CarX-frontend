@@ -1,5 +1,5 @@
-import { LockOutlined, UserOutlined, GoogleOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Divider, message } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Input, message } from "antd";
 
 import { useInput } from "../hooks/useInput";
 
@@ -7,7 +7,7 @@ import { closeModal, openModal } from "../store/modal-slice";
 import { useModalDispatch, useUserDispatch } from "../store/hooks";
 
 import { validateEmail, validatePassword } from "../util/validation";
-import { fetchUserData, googleLogin, login } from "../store/user-actions";
+import { fetchUserData, login } from "../store/user-actions";
 
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -41,9 +41,9 @@ const Login = () => {
     }
   };
 
-  const handleGoogle = () => {
-    userDispatch(googleLogin());
-  };
+  // const handleGoogle = () => {
+  //   userDispatch(googleLogin());
+  // };
 
   return (
     <>
@@ -127,12 +127,12 @@ const Login = () => {
             Signup
           </Button>
         </Form.Item>
-        <Divider>Or</Divider>
+        {/* <Divider>Or</Divider>
         <div className="flex justify-center space-x-4">
           <Button onClick={handleGoogle}>
             <GoogleOutlined className="text-xl text-blue-500 hover:text-blue-700 cursor-pointer" />
           </Button>
-        </div>
+        </div> */}
       </Form>
     </>
   );
